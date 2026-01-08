@@ -1,3 +1,9 @@
+---
+license: mit
+tags:
+  - bioRxiv:10.64898/2026.01.05.697778
+---
+
 <div align="center">
   <h1>HYALINE</h1>
   <strong>Geometric Deep Learning for GPCR Activation State Prediction</strong>
