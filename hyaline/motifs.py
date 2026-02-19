@@ -183,6 +183,103 @@ def compute_key_distances(coords: np.ndarray, sequence: str) -> Dict[str, float]
     return results
 
 
+# =============================================================================
+# TRANSCRIPTION FACTOR DOMAIN DETECTION
+# =============================================================================
+
+TF_DOMAIN_PATTERNS = {
+    'zinc_finger':    r'C.{2,4}C.{12}H.{3,5}H',  # C2H2 zinc finger
+    'leucine_zipper': r'L.{6}L.{6}L',              # Leucine zipper heptad
+    'basic_helix':    r'[RK]{2}.{4,8}[RK]{2}',     # bHLH / bZIP basic region
+    'homeodomain':    r'[RK].{2}[RK].{6}W',         # Homeodomain HTH core
+    'WRKY':           r'WRKYGQK',                    # WRKY domain signature
+    'ETS_helix':      r'[RK].{3}W.{2}[KR]',         # ETS recognition helix
+}
+
+TF_DOMAIN_TYPE_MAPPING = {
+    'zinc_finger':    1,
+    'leucine_zipper': 2,
+    'basic_helix':    3,
+    'homeodomain':    4,
+    'WRKY':           5,
+    'ETS_helix':      6,
+}
+
+NUM_TF_DOMAIN_TYPES = 7  # 0 = no domain, 1-6 = domain types above
+
+
+def detect_tf_domains(sequence: str) -> Dict[str, List[Tuple[int, int]]]:
+    """
+    Detect TF DNA-binding and regulatory domains in a sequence.
+
+    Detects C2H2 zinc fingers, leucine zipper heptads, bHLH/bZIP basic
+    regions, homeodomain HTH cores, WRKY signatures, and ETS helices.
+
+    Args:
+        sequence: Amino acid sequence
+
+    Returns:
+        Dictionary mapping domain names to list of (start, end) positions
+    """
+    return {
+        name: detect_motif(sequence, pattern)
+        for name, pattern in TF_DOMAIN_PATTERNS.items()
+    }
+
+
+def get_tf_domain_mask(
+    sequence: str, domain_types: Optional[List[str]] = None
+) -> torch.Tensor:
+    """
+    Create binary mask indicating which residues are part of TF domains.
+
+    Args:
+        sequence: Amino acid sequence
+        domain_types: Domain types to include (default: all)
+
+    Returns:
+        Binary tensor [seq_len] where 1 = domain residue
+    """
+    seq_len = len(sequence)
+    mask = torch.zeros(seq_len, dtype=torch.float32)
+
+    domains = detect_tf_domains(sequence)
+
+    if domain_types is None:
+        domain_types = list(TF_DOMAIN_PATTERNS.keys())
+
+    for name, positions in domains.items():
+        if name in domain_types:
+            for start, end in positions:
+                mask[start:end] = 1.0
+
+    return mask
+
+
+def get_tf_domain_type_embedding(sequence: str) -> torch.Tensor:
+    """
+    Create per-residue TF domain type tensor.
+
+    Args:
+        sequence: Amino acid sequence
+
+    Returns:
+        Tensor [seq_len] with domain type ID per residue (0 = none)
+    """
+    seq_len = len(sequence)
+    types = torch.zeros(seq_len, dtype=torch.long)
+
+    domains = detect_tf_domains(sequence)
+
+    for name, positions in domains.items():
+        if name in TF_DOMAIN_TYPE_MAPPING:
+            type_id = TF_DOMAIN_TYPE_MAPPING[name]
+            for start, end in positions:
+                types[start:end] = type_id
+
+    return types
+
+
 # Test function
 def test_motif_detection():
     """Test motif detection on sample sequences."""

@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hyaline"
-version = "2.0.0"
-description = "Geometric Deep Learning for GPCR Activation State Prediction"
+version = "2.1.0"
+description = "Geometric Deep Learning for Protein Function Modeling: GPCR Activation and Transcription Factor Analysis"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
     {name = "Varosync"}
 ]
-keywords = ["GPCR", "deep-learning", "graph-neural-network", "protein-structure", "drug-discovery"]
+keywords = ["GPCR", "transcription-factor", "deep-learning", "graph-neural-network", "protein-structure", "protein-language-model", "drug-discovery", "gene-regulation"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Science/Research",
