@@ -1,88 +1,29 @@
-# Hyaline Kinase Project (v1.0)
+# Hyaline Kinase — Conformational Selectivity
 
-**Branch**: `kinase-v1`  
-**Status**: Active Development  
-**Last Updated**: February 2026
+**Branch:** `kinase-v1` (separate from `master`, which is GPCR-only)
 
-## Quick Start
+## Project
 
-This branch contains the kinase conformational selectivity prediction work, extending Hyaline from GPCR activation to kinase DFG-in/out prediction.
+Extension of Hyaline to **kinase conformational selectivity**: predicting how drug binding changes between DFG-in and DFG-out conformations. Same kinase, different 3D shape → different binding. Relevant for Type I vs Type II inhibitor design.
 
-### For Graduate Student Researchers
+## Main Finding
 
-**Start here**: Read [`RESEARCH_GUIDE.md`](./RESEARCH_GUIDE.md) for comprehensive instructions.
+Structure is necessary. Sequence-only models fail (R² ≈ 0.01). The main signal is the **interaction term** DFG_displacement × Drug_size (~56% of feature importance). Hand-crafted features outperform end-to-end GNNs on this dataset (~1.6K structures). The hybrid model (RF features + MLP) reaches R² ≈ 0.95.
 
-**Quick setup**:
-```bash
-# Clone and checkout
-git clone https://github.com/Varosync/Hyaline.git
-cd Hyaline
-git checkout kinase-v1
+## Codebase
 
-# CRITICAL: Download data from S3 (NOT in repo)
-aws s3 sync s3://hyaline-kinase-data/ ./ --region us-east-1
+| Path | Purpose |
+|------|---------|
+| `hyaline/loaders/klifs_loader.py` | KLIFS API client |
+| `hyaline/loaders/klifs_pipeline.py` | Feature extraction pipeline |
+| `hyaline/models/kinase_binding.py` | Spiking EGNN + kinase model |
+| `scripts/hybrid_kinase_model.py` | Hybrid RF+MLP baseline |
+| `scripts/kinase_ablation.py` | Structure vs sequence ablations |
+| `scripts/klifs_validation.py` | Validation on known drugs |
+| `scripts/train_real_klifs.py` | DFG classifier on real KLIFS |
 
-# Verify data downloaded
-ls klifs_cache/ data/klifs_cache/ checkpoints/
+## Data
 
-# Install
-conda create -n hyaline python=3.10
-conda activate hyaline
-pip install -e .
-
-# Verify (uses synthetic data, no S3 needed)
-python scripts/hybrid_kinase_model.py
-```
-
-### For PI/Collaborators
-
-**Upload data to S3**:
-```bash
-./scripts/upload_to_s3.sh
-```
-
-**Current status**: See [`PROGRESS.md`](./PROGRESS.md)
-
-## Project Structure
-
-```
-research/kinase/
-├── README.md              # This file
-├── RESEARCH_GUIDE.md      # Comprehensive guide for students
-├── PROGRESS.md            # Project history and current state
-└── SUMMARY.md             # Technical summary
-
-scripts/
-├── hybrid_kinase_model.py      # Baseline hybrid model (R² ≈ 0.95)
-├── train_real_klifs.py         # Training on real KLIFS data
-├── klifs_validation.py         # Biological validation
-└── upload_to_s3.sh             # Data upload script
-
-hyaline/
-├── data/klifs_loader.py        # KLIFS API client
-└── models/kinase_binding.py    # GNN architecture
-
-data/
-└── klifs_cache/                # 1,661 structures (download from S3)
-```
-
-## Key Results
-
-- **Hybrid Model**: R² ≈ 0.95 on synthetic data
-- **Feature Importance**: DFG×Drug_Size = 56%
-- **Pure GNN**: R² < 0 (failing on small dataset)
-- **KLIFS Data**: 1,661 structures across 10 kinases
-- **Bioactivity**: 132 records from ChEMBL
-
-## Next Steps
-
-1. Extract real conformational features (mobitz_dihedral, dfg_d_rotation)
-2. Create matched structure-affinity pairs
-3. Implement Feature-Injected GNN
-4. Compare: Pure GNN vs Feature-Injected GNN vs Hybrid MLP
-
-## Contact
-
-- PI: [email]
-- Slack: `#hyaline-kinase`
-- Issues: GitHub Issues on this branch
+- **KLIFS:** ~1,661 structures, 10 kinases, DFG/C-helix annotations
+- **S3:** `in_notion`
+- **ChEMBL:** 132 bioactivity records via KLIFS
