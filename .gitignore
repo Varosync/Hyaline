@@ -33,6 +33,8 @@ venv.bak/
 # Data & Models (Large Files)
 data/
 results/
+klifs_cache/
+checkpoints/
 *.pt
 *.pth
 *.h5
