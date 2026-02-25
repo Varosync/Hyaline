@@ -1,0 +1,220 @@
+NAME,FAMILY,GROUPS,PDB,CHAIN,ALTERNATE_MODEL,SPECIES,LIGAND,PDB_IDENTIFIER,ALLOSTERIC_NAME,ALLOSTERIC_PDB,DFG,AC_HELIX,TYPE,TYPE Validated
+IRAK4,IRAK,TKL,6ega,B,B,Human,"3-{2-[(cyclopropanecarbonyl)amino][1,3]thiazolo[5,4-b]pyridin-5-yl}-N-{4-[(piperazin-1-yl)methyl]-3-(trifluoromethyl)phenyl}benzamide",J8A,-,-,out,in,Type II,Y
+IRAK4,IRAK,TKL,6eg9,A,B,Human,"3-(imidazo[1,2-b]pyridazin-3-ylethynyl)-4-methyl-N-{4-[(4-methylpiperazin-1-yl)methyl]-3-(trifluoromethyl)phenyl}benzamide",0LI,-,-,out,in,Type II,Y
+MET,Met,TK,7v3r,A,B,Human,"~{N}1'-[3-fluoranyl-4-(2-phenylazanylpyrimidin-4-yl)oxy-phenyl]-~{N}1-(4-fluorophenyl)cyclopropane-1,1-dicarboxamide",5IE,-,-,out,in,Type II,Y
+MET,Met,TK,7v3s,A,A,Human,"~{N}1'-[3-fluoranyl-4-(10~{H}-pyrido[3,2-b][1,4]benzoxazin-4-yloxy)phenyl]-~{N}1-(4-fluorophenyl)cyclopropane-1,1-dicarboxamide",5I9,-,-,out,in,Type II,Y
+KIT,PDGFR,TK,6kla,A,B,Human,"N-[6-(4-ethylpiperazin-1-yl)-2-methyl-pyrimidin-4-yl]-5-pyridin-4-yl-1,3-thiazol-2-amine",DJX,-,-,out,in,Type II,Y
+KIT,PDGFR,TK,6mob,A,A,Human,"N-{4-chloro-5-[1-ethyl-7-(methylamino)-2-oxo-1,2-dihydro-1,6-naphthyridin-3-yl]-2-fluorophenyl}-N'-phenylurea",JWY,-,-,out,in,Type II,Y
+KIT,PDGFR,TK,1t46,A,B,Human,4-(4-METHYL-PIPERAZIN-1-YLMETHYL)-N-[4-METHYL-3-(4-PYRIDIN-3-YL-PYRIMIDIN-2-YLAMINO)-PHENYL]-BENZAMIDE,STI,-,-,out,in,Type II,Y
+KIT,PDGFR,TK,6xva,B,-,Human,~{N}-[[3-[2-[3-methoxy-5-(7-methoxyquinolin-4-yl)oxy-pyridin-2-yl]ethanoylamino]-5-methyl-phenyl]methyl]propanamide,O2K,-,-,out,in,Type II,Y
+KIT,PDGFR,TK,6gqm,B,-,Human,"~{N}-[4-[[5-fluoranyl-7-(2-methoxyethoxy)quinazolin-4-yl]amino]phenyl]-2-(4-propan-2-yl-1,2,3-triazol-1-yl)ethanamide",F8H,-,-,out,in,Type II,Y
+KIT,PDGFR,TK,6gql,A,-,Human,"~{N}-[4-(6,7-dimethoxyquinazolin-4-yl)oxyphenyl]-2-(4-propan-2-yl-1,2,3-triazol-1-yl)ethanamide",F8B,-,-,out,in,Type II,Y
+KIT,PDGFR,TK,6gqk,A,B,Human,"~{N}-[4-(6,7-dimethoxyquinazolin-4-yl)oxyphenyl]-2-(1-ethylpyrazol-4-yl)ethanamide",F88,-,-,out,in,Type II,Y
+KIT,PDGFR,TK,3g0e,A,B,Human,"N-[2-(diethylamino)ethyl]-5-[(Z)-(5-fluoro-2-oxo-1,2-dihydro-3H-indol-3-ylidene)methyl]-2,4-dimethyl-1H-pyrrole-3-carboxamide",B49,-,-,out,in,Type II,Y
+MAP3K7 (TAK1),MLK,TKL,5gjf,A,-,Human,N-(2-isopropoxy-4-(4-methylpiperazine-1-carbonyl)phenyl)-2-(3-(3-phenylureido)phenyl)thiazole-4-carboxamide,6V4,-,-,out,in,Type II,Y
+KIT,PDGFR,TK,6hh1,A,A,Human,"~{N}-(2,3-dimethylphenyl)-5-(4-pyridin-4-yloxyphenyl)-4~{H}-1,2,4-triazol-3-amine",G4E,-,-,out,in,Type II,Y
+KIT,PDGFR,TK,6gqj,B,B,Human,"2-[4-(6,7-dimethoxyquinazolin-4-yl)oxy-2-methoxy-phenyl]-~{N}-(1-propan-2-ylpyrazol-4-yl)ethanamide",F82,-,-,out,in,Type II,Y
+KIT,PDGFR,TK,6xv9,A,-,Human,~{N}-[3-[(dimethylamino)methyl]-5-methyl-phenyl]-2-[3-methoxy-5-(7-methoxyquinolin-4-yl)oxy-pyridin-2-yl]ethanamide,O35,-,-,out,in,Type II,Y
+KIT,PDGFR,TK,6itt,B,B,Human,"N-(5-ethyl-1,2-oxazol-3-yl)-N'-[4-(2-{[6-(4-ethylpyrazin-1(4H)-yl)pyrimidin-4-yl]amino}-1,3-thiazol-5-yl)phenyl]urea",AWO,-,-,out,in,Type II,Y
+TNNI3K (HH498),MLK,TKL,7mgj,A,-,Human,N-methyl-4-[4-({[3-(trifluoromethyl)phenyl]carbamoyl}amino)phenoxy]pyridine-2-carboxamide,ZFS,-,-,out,in,Type II,Y
+KIT,PDGFR,TK,7khg,A,B,Human,"5-[(5-chloro-1H-pyrrolo[2,3-b]pyridin-3-yl)methyl]-N-{[6-(trifluoromethyl)pyridin-3-yl]methyl}pyridin-2-amine",P31,-,-,out,in,Type II,Y
+KIT,PDGFR,TK,4hvs,A,-,Human,"5-(1H-pyrrolo[2,3-b]pyridin-3-ylmethyl)-N-[4-(trifluoromethyl)benzyl]pyridin-2-amine",647,-,-,out,in,Type II,Y
+KIT,PDGFR,TK,7zw8,A,B,Human,"~{N}-[[4-(1-methylpyrazol-4-yl)phenyl]methyl]-6-[7-(3-pyrrolidin-1-ylpropoxy)imidazo[1,2-a]pyridin-3-yl]pyrimidin-4-amine",K3R,-,-,out,in,Type II,Y
+TEK (TIE2),Tie,TK,2oo8,X,-,Human,N-{3-[3-(DIMETHYLAMINO)PROPYL]-5-(TRIFLUOROMETHYL)PHENYL}-4-METHYL-3-[(3-PYRIMIDIN-4-YLPYRIDIN-2-YL)AMINO]BENZAMIDE,RAJ,-,-,out,in,Type II,Y
+TNNI3K (HH498),MLK,TKL,7mgk,A,B,Human,"N-(3,5-dichloro-4-{[6-(methylamino)pyrimidin-4-yl]oxy}phenyl)-N'-[3-(trifluoromethyl)phenyl]urea",ZGD,-,-,out,in,Type II,Y
+CDK8,CDK,CMGC,5hvy,A,B,Human,N-{(3S)-1-[2-(methylamino)pyrimidin-4-yl]pyrrolidin-3-yl}-N'-{4-[(morpholin-4-yl)methyl]-3-(trifluoromethyl)phenyl}urea,66X,-,-,out,in,Type II,Y
+Abl1 (ABL1),Abl,TK,3oy3,A,-,Mouse,5-[(5-{[4-{[4-(2-hydroxyethyl)piperazin-1-yl]methyl}-3-(trifluoromethyl)phenyl]carbamoyl}-2-methylphenyl)ethynyl]-1-methyl-1H-imidazole-2-carboxamide,XY3,-,-,out,in,Type II,Y
+Abl1 (ABL1),Abl,TK,1fpu,B,-,Mouse,N-[4-METHYL-3-[[4-(3-PYRIDINYL)-2-PYRIMIDINYL]AMINO]PHENYL]-3-PYRIDINECARBOXAMIDE,PRC,-,-,out,in,Type II,Y
+LIMK2,LISK,TKL,7qhg,A,B,Human,"2-(2-methylpropanoylamino)-~{N}-[2-[(phenylmethyl)-[4-(phenylsulfamoyl)phenyl]carbonyl-amino]ethyl]-1,3-thiazole-5-carboxamide",T3B,-,-,out,out,Type II,Y
+EPHA3 (EphA3),Eph,TK,4p5z,A,-,Human,"2-amino-1-[4-({[3-(trifluoromethyl)phenyl]carbamoyl}amino)phenyl]-1H-pyrrolo[2,3-b]quinoxaline-3-carboxamide",Q7M,-,-,out,in,Type II,Y
+EPHA3 (EphA3),Eph,TK,4twn,A,B,Human,1-(5-TERT-BUTYL-2-P-TOLYL-2H-PYRAZOL-3-YL)-3-[4-(2-MORPHOLIN-4-YL-ETHOXY)-NAPHTHALEN-1-YL]-UREA,B96,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,5vam,B,A,Human,"N-{2-methyl-5'-(morpholin-4-yl)-6'-[(oxan-4-yl)oxy][3,3'-bipyridin]-5-yl}-3-(trifluoromethyl)benzamide",92J,-,-,out,in,Type II,Y
+EPHB4 (EphB4),Eph,TK,6fni,A,B,Human,"4-methyl-3-[(1-methyl-6-pyridin-3-yl-pyrazolo[3,4-d]pyrimidin-4-yl)amino]-~{N}-[3-(trifluoromethyl)phenyl]benzamide",DXH,-,-,out,in,Type II,Y
+STK10 (LOK),STE20,STE,4equ,B,A,Human,"N-{3-[(3-{4-[(4-methoxyphenyl)amino]-1,3,5-triazin-2-yl}pyridin-2-yl)amino]-4-methylphenyl}-3-(trifluoromethyl)benzamide",G6I,-,-,out,in,Type II,Y
+CDK8,CDK,CMGC,4f7j,A,A,Human,1-[3-tert-butyl-1-(4-methylphenyl)-1H-pyrazol-5-yl]-3-(2-hydroxyethyl)urea,0SU,-,-,out,in,Type II,Y
+MET,Met,TK,5dg5,B,B,Human,"N-(2,5-difluoro-4-{[2-(1-methyl-1H-pyrazol-4-yl)pyridin-4-yl]oxy}phenyl)-N'-(4-fluorophenyl)cyclopropane-1,1-dicarboxamide",5B4,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,6b8u,A,-,Human,"~{N}-[3-(2-acetamidoimidazo[1,2-a]pyridin-6-yl)-4-methyl-phenyl]-3-(trifluoromethyl)benzamide",8EN,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,8c7y,A,A,Human,"~{N}-[3-[(5-chloranyl-1~{H}-pyrrolo[2,3-b]pyridin-3-yl)carbonyl]-2,4-bis(fluoranyl)phenyl]-3-(2-cyanopropan-2-yl)benzamide",TXV,-,-,out,in,Type II,Y
+FGFR4,FGFR,TK,4qqc,A,A,Human,"N-(4-{[3-(3,5-dimethoxyphenyl)-7-{[4-(4-methylpiperazin-1-yl)phenyl]amino}-2-oxo-3,4-dihydropyrimido[4,5-d]pyrimidin-1(2H)-yl]methyl}phenyl)propanamide",37O,-,-,out,in,Type II,Y
+FGFR4,FGFR,TK,4r6v,A,-,Human,"N-[4-({[(2,6-dichloro-3,5-dimethoxyphenyl)carbamoyl](6-{[4-(4-methylpiperazin-1-yl)phenyl]amino}pyrimidin-4-yl)amino}methyl)phenyl]propanamide",FI3,-,-,out,in,Type II,Y
+EPHA2 (EphA2),Eph,TK,8bog,A,A,Human,"~{N}-[4-methyl-3-[(1-methyl-6-pyridin-3-yl-pyrazolo[3,4-d]pyrimidin-4-yl)amino]phenyl]-3-(trifluoromethyl)benzamide",QUU,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,8f7p,A,B,Human,N-{3-[2-(2-hydroxyethoxy)-6-(morpholin-4-yl)pyridin-4-yl]-4-methylphenyl}-2-(trifluoromethyl)pyridine-4-carboxamide,K81,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,8f7o,A,B,Human,"6-amino-5-chloro-N-[(1R)-1-(5-{[5-chloro-4-(trifluoromethyl)pyridin-2-yl]carbamoyl}-1,3-thiazol-2-yl)ethyl]pyrimidine-4-carboxamide",QOP,-,-,out,in,Type II,Y
+KDR,VEGFR,TK,3vnt,A,A,Human,"2-chloro-3-(1-cyanocyclopropyl)-N-[5-({2-[(cyclopropylcarbonyl)amino][1,3]thiazolo[5,4-b]pyridin-5-yl}oxy)-2-fluorophenyl]benzamide",0JA,-,-,out,in,Type II,Y
+SLK,STE20,STE,8bem,A,B,Human,TIVOZANIB,AV9,-,-,out,in,Type II,Y
+FLT1,VEGFR,TK,3hng,A,A,Human,N-(4-chlorophenyl)-2-[(pyridin-4-ylmethyl)amino]benzamide,8ST,-,-,out,in,Type II,Y
+LIMK2,LISK,TKL,4tpt,B,-,Human,"N-{4-[(1S)-1,2-dihydroxyethyl]benzyl}-N-methyl-4-(phenylsulfamoyl)benzamide",35H,-,-,out,out,Type II,Y
+NTRK1 (TRKA),Trk,TK,6dkg,A,A,Human,"2-{[(3R,4S)-3-fluoro-1-{[4-(trifluoromethoxy)phenyl]acetyl}piperidin-4-yl]oxy}-4-(2-hydroxy-2-methylpropoxy)benzamide",GO7,"5-phenylthieno[2,3-d]pyrimidin-4(3H)-one",22L,out,in,Type II,Y
+EPHA3 (EphA3),Eph,TK,3dzq,A,A,Human,N-[2-methyl-5-({[3-(4-methyl-1H-imidazol-1-yl)-5-(trifluoromethyl)phenyl]carbonyl}amino)phenyl]isoxazole-5-carboxamide,IFC,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,6cad,B,-,Human,"1-(propan-2-yl)-3-({3-[3-(trifluoromethyl)phenyl]isoquinolin-8-yl}ethynyl)-1H-pyrazolo[3,4-d]pyrimidin-4-amine",EU4,-,-,out,out,Type II,Y
+BRAF,RAF,TKL,4g9c,A,-,Human,"3-{[3-(2-cyanopropan-2-yl)benzoyl]amino}-2,6-difluoro-N-(3-methoxy-2H-pyrazolo[3,4-b]pyridin-5-yl)benzamide",0WP,-,-,out,in,Type II,Y
+CSF1R (FMS),PDGFR,TK,8jot,A,-,Human,N-(2-(dimethylamino)ethyl)-1-(3-((4-((2-methyl-1H-indol-5-yl)oxy)pyrimidin-2-yl)amino)phenyl)methanesulfonamide,UKI,-,-,out,in,Type II,Y
+RIPK2,RIPK,TKL,6es0,A,-,Human,2-[2-fluoranyl-4-[[2-fluoranyl-4-[2-(methylcarbamoyl)pyridin-4-yl]oxy-phenyl]carbamoylamino]phenyl]sulfanylethanoic acid,BW8,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,6nsq,B,-,Human,"5-[(4-amino-1-ethyl-1H-pyrazolo[3,4-d]pyrimidin-3-yl)ethynyl]-N-(4-chlorophenyl)-6-methylisoquinolin-1-amine",KZP,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,5csx,A,-,Human,"N-(3-{5-[(1-ethylpiperidin-4-yl)(methyl)amino]-3-(pyrimidin-5-yl)-1H-pyrrolo[3,2-b]pyridin-1-yl}-2,4-difluorophenyl)propane-1-sulfonamide",54J,-,-,out,out,Type II,Y
+MAP2K7,STE7,STE,6yg7,B,A,Human,~{N}-[4-[(4-ethylpiperazin-1-yl)methyl]-3-(trifluoromethyl)phenyl]-4-methyl-3-[2-[[(3~{R})-1-propanoylpyrrolidin-3-yl]amino]pyrimidin-4-yl]oxy-benzamide,OQ2,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,5c9c,B,B,Human,"1-(3,3-dimethylbutyl)-3-{2-fluoro-4-methyl-5-[7-methyl-2-(methylamino)pyrido[2,3-d]pyrimidin-6-yl]phenyl}urea",4Z5,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,6p7g,C,-,Human,"3-[(imidazo[1,2-b]pyridazin-3-yl)ethynyl]-4-methyl-N-[4-({[2-(morpholin-4-yl)ethyl]amino}methyl)-3-(trifluoromethyl)phenyl]benzamide",E7M,-,-,out,in,Type II,Y
+DDR1,DDR,TK,5bvn,A,-,Human,"N-[5-({[(3-fluorophenyl)carbamoyl]amino}methyl)-2-methylphenyl]imidazo[1,2-a]pyridine-3-carboxamide",4VD,-,-,out,in,Type II,Y
+DDR1,DDR,TK,5saz,A,B,Human,"2-chloro-5-{3-chloro-4-[(2-hydroxyethyl)amino]benzamido}-N-(1H-pyrrolo[2,3-b]pyridin-5-yl)benzamide",1IW,-,-,out,in,Type II,Y
+DDR1,DDR,TK,6fil,A,A,Human,"2-[8-(2~{H}-indazol-5-ylcarbonyl)-4-oxidanylidene-1-phenyl-1,3,8-triazaspiro[4.5]decan-3-yl]-~{N}-methyl-ethanamide",D6W,-,-,out,in,Type II,Y
+DDR1,DDR,TK,6fio,A,B,Human,"2-[1'-(1~{H}-indazol-5-ylcarbonyl)-4-methyl-2-oxidanylidene-spiro[indole-3,4'-piperidine]-1-yl]-~{N}-[2,2,2-tris(fluoranyl)ethyl]ethanamide",DJH,-,-,out,out,Type II,Y
+DDR1,DDR,TK,7be6,A,B,Human,5-amino-N-(4-(((2S)-4-cyclohexyl-1-((1-(methylsulfonyl)piperidin-3-yl)amino)-1-oxobutan-2-yl)carbamoyl)benzyl)-1-phenyl-1H-pyrazole-4-carboxamide,TJW,-,-,out,in,Type II,Y
+CSF1R (FMS),PDGFR,TK,3krl,A,B,Human,5-cyano-N-[4-(4-methylpiperazin-1-yl)-2-piperidin-1-ylphenyl]furan-2-carboxamide,KRL,-,-,out,in,Type II,Y
+CSF1R (FMS),PDGFR,TK,3lco,A,B,Human,3-({4-methoxy-5-[(4-methoxybenzyl)oxy]pyridin-2-yl}methoxy)-5-(1-methyl-1H-pyrazol-4-yl)pyrazin-2-amine,LC0,-,-,out,in,Type II,Y
+CSF1R (FMS),PDGFR,TK,3dpk,A,B,Human,"8-cyclohexyl-N-methoxy-5-oxo-2-{[4-(2-pyrrolidin-1-ylethyl)phenyl]amino}-5,8-dihydropyrido[2,3-d]pyrimidine-6-carboxamide",8C5,-,-,out,in,Type II,Y
+CSF1R (FMS),PDGFR,TK,6ig8,A,B,Human,"(3-{4-[(4-cyclopropylphenyl)methoxy]-3-methoxyphenyl}azetidin-1-yl)(4-{[(2S)-2,3-dihydroxypropoxy]methyl}pyridin-2-yl)methanone",A7O,-,-,out,in,Type II,Y
+KDR,VEGFR,TK,5ew3,A,-,Human,2-(pyridin-4-ylmethylamino)-~{N}-[3-(trifluoromethyl)phenyl]benzamide,5T2,-,-,out,in,Type II,Y
+DDR1,DDR,TK,7feh,A,B,Human,N-[(5-chloranyl-2-ethylsulfonyl-phenyl)methyl]-3-piperazin-1-yl-5-(trifluoromethyloxy)benzamide,3UI,-,-,out,in,Type II,Y
+MET,Met,TK,8an8,A,-,Human,"3-[bis(fluoranyl)methyl]-~{N}-methyl-~{N}-[(1~{R})-8-methyl-5-(3-methyl-1~{H}-indazol-6-yl)-1,2,3,4-tetrahydronaphthalen-1-yl]pyridine-2-carboxamide",N0U,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,4rzw,B,-,Human,"3-(2-cyanopropan-2-yl)-N-{4-methyl-3-[(3-methyl-4-oxo-3,4-dihydroquinazolin-6-yl)amino]phenyl}benzamide",B1E,-,-,out,in,Type II,Y
+DDR1,DDR,TK,5fdp,A,-,Human,"(4~{S})-4-methyl-~{N}-[3-[(4-methylpiperazin-1-yl)methyl]-5-(trifluoromethyl)phenyl]-2-pyrimidin-5-yl-3,4-dihydro-1~{H}-isoquinoline-7-carboxamide",5WR,-,-,out,in,Type II,Y
+CDK8,CDK,CMGC,4f70,A,-,Human,1-[3-tert-butyl-1-(4-methylphenyl)-1H-pyrazol-5-yl]-3-[2-(morpholin-4-yl)ethyl]urea,0ST,-,-,out,in,Type II,Y
+NTRK1 (TRKA),Trk,TK,8j61,A,-,Human,"4^6-methyl-N-(3-(4-methyl-1H-imidazol-1-yl)-5-(trifluoromethyl)phenyl)-14-oxo-5-oxa-13-aza-1(3,6)-imidazo[1,2-b]pyridazina-4(1,3)-benzenacyclotetradecaphan-2-yne-4^5-carboxamide",A0X,-,-,out,in,Type II,Y
+NTRK1 (TRKA),Trk,TK,8j63,A,-,Human,"4^6-methyl-N-(3-(4-methyl-1H-imidazol-1-yl)-5-(trifluoromethyl)phenyl)-11-oxo-5-oxa-10,14-diaza-1(3,6)-imidazo[1,2-b]pyridazina-4(1,3)-benzenacyclotetradecaphan-2-yne-4^5-carboxamide",A6X,-,-,out,in,Type II,Y
+NTRK1 (TRKA),Trk,TK,8j5w,A,-,Human,"N-(3-cyclopropyl-5-((4-methylpiperazin-1-yl)methyl)phenyl)-4^6-methyl-14-oxo-5-oxa-13-aza-1(3,6)-imidazo[1,2-b]pyridazina-4(1,3)-benzenacyclotetradecaphan-2-yne-4^5-carboxamide",A4U,-,-,out,in,Type II,Y
+DDR1,DDR,TK,5saw,A,B,Human,2-{3-[(pyridin-3-yl)ethynyl]phenyl}-N-[3-(trifluoromethyl)phenyl]acetamide,1IM,-,-,out,in,Type II,Y
+JAK2,JakA,TK,7teu,A,A,Human,"3-{(4S)-2-[(cyclopropanecarbonyl)amino]imidazo[1,2-b]pyridazin-6-yl}-N-{3-[(4-ethylpiperazin-1-yl)methyl]-5-(trifluoromethyl)phenyl}-4-methylbenzamide",I6C,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,5ct7,B,-,Human,1-methyl-5-({2-[5-(trifluoromethyl)-1H-imidazol-2-yl]pyridin-4-yl}oxy)-N-[4-(trifluoromethyl)phenyl]-1H-benzimidazol-2-amine,55J,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,3ii5,A,-,Human,"N-[3-(3-{4-[(dimethylamino)methyl]phenyl}pyrazolo[1,5-a]pyrimidin-7-yl)phenyl]-3-(trifluoromethyl)benzamide",831,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,4r5y,B,-,Human,"5-({(1R,1aS,6bR)-1-[5-(trifluoromethyl)-1H-benzimidazol-2-yl]-1a,6b-dihydro-1H-cyclopropa[b][1]benzofuran-5-yl}oxy)-3,4-dihydro-1,8-naphthyridin-2(1H)-one",3K3,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,6n0q,B,A,Human,"N-[4-methyl-3-(1-methyl-2-oxo-2,3-dihydro-1H-benzimidazol-5-yl)phenyl]-3-(trifluoromethyl)benzamide",K7S,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,4fc0,B,-,Human,"2-chloro-3-[(2-cyanopropan-2-yl)oxy]-N-{5-[{2-[(cyclopropylcarbonyl)amino][1,3]thiazolo[5,4-b]pyridin-5-yl}(methyl)amino]-2-fluorophenyl}benzamide",0T2,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,1uwj,B,-,Human,4-{4-[({[4-CHLORO-3-(TRIFLUOROMETHYL)PHENYL]AMINO}CARBONYL)AMINO]PHENOXY}-N-METHYLPYRIDINE-2-CARBOXAMIDE,BAX,-,-,out,in,Type II,Y
+DDR1,DDR,TK,5fdx,B,-,Human,"3-[(4-methylpiperazin-1-yl)methyl]-~{N}-[(4~{R})-4-methyl-2-pyrimidin-5-yl-3,4-dihydro-1~{H}-isoquinolin-7-yl]-5-(trifluoromethyl)benzamide",5X1,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,4ksq,B,-,Human,"N-{7-cyano-6-[4-fluoro-3-({[3-(trifluoromethyl)phenyl]carbamoyl}amino)phenoxy]-1,3-benzothiazol-2-yl}cyclopropanecarboxamide",1SW,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,3q96,A,-,Human,"(2S)-N-[3-(2-aminopropan-2-yl)-5-(trifluoromethyl)phenyl]-7-[(7-oxo-5,6,7,8-tetrahydro-1,8-naphthyridin-4-yl)oxy]-1,2,3,4-tetrahydronaphthalene-2-carboxamide",0NF,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,3idp,A,-,Human,"N~1~-(4-chlorophenyl)-6-methyl-N~5~-[3-(7H-purin-6-yl)pyridin-2-yl]isoquinoline-1,5-diamine",L1E,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,4xv9,A,A,Human,"N-{3-[(5-chloro-1H-pyrrolo[2,3-b]pyridin-3-yl)carbonyl]-2,4-difluorophenyl}-4-(trifluoromethyl)benzenesulfonamide",1OO,-,-,out,out,Type II,Y
+DDR1,DDR,TK,7bcm,B,-,Human,"~{N}-[[4-[[(2~{S})-4-cyclohexyl-1-[[(3~{S})-1-methylsulfonylpiperidin-3-yl]amino]-1-oxidanylidene-butan-2-yl]carbamoyl]phenyl]methyl]imidazo[1,2-a]pyridine-3-carboxamide",TBK,-,-,out,in,Type II,Y
+DDR1,DDR,TK,6gwr,B,B,Human,"3-(2-imidazo[1,2-a]pyrazin-3-ylethynyl)-~{N}-[3-[(4-methylpiperazin-1-yl)methyl]-5-(trifluoromethyl)phenyl]-4-propan-2-yl-benzamide",FEW,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,4ksp,A,-,Human,"N-{7-cyano-6-[4-fluoro-3-({[3-(trifluoromethyl)phenyl]acetyl}amino)phenoxy]-1,3-benzothiazol-2-yl}cyclopropanecarboxamide",1SU,-,-,out,in,Type II,Y
+NTRK3 (TRKC),Trk,TK,6kzc,A,-,Human,"3-(2-imidazo[1,2-a]pyrazin-3-ylethynyl)-2-methyl-~{N}-[3-(4-methylpiperazin-1-yl)-5-(trifluoromethyl)phenyl]benzamide",DZC,-,-,out,in,Type II,Y
+CDK8,CDK,CMGC,6tpa,A,-,Human,"1-[4-chloranyl-3-(trifluoromethyl)phenyl]-3-(5-oxidanylidene-6-pyridin-4-yl-pyrido[2,3-b][1,5]benzoxazepin-9-yl)urea",NZ8,"(2~{R})-butane-1,2-diol",NZ5,out,in,Type II,Y
+CDK8,CDK,CMGC,4f6u,A,A,Human,1-[3-tert-butyl-1-(4-methylphenyl)-1H-pyrazol-5-yl]-3-[3-(morpholin-4-yl)propyl]urea,0SR,-,-,out,in,Type II,Y
+CDK8,CDK,CMGC,4f7n,A,-,Human,1-[3-tert-butyl-1-(4-methylphenyl)-1H-pyrazol-5-yl]-3-(5-hydroxypentyl)urea,0SV,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,6xfp,A,A,Human,"4-amino-N-{1-[(3-chloro-2-fluorophenyl)amino]-6-methylisoquinolin-5-yl}thieno[3,2-d]pyrimidine-7-carboxamide",V1Y,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,7k0v,A,A,Human,"N-(3,3-dimethylbutyl)-N'-{2-fluoro-5-[(5-fluoro-3-methyl-4-oxo-3,4-dihydroquinazolin-6-yl)amino]-4-methylphenyl}urea",VQP,-,-,out,in,Type II,Y
+MAP2K1,STE7,STE,5hze,A,A,Human,"(3S,4R,8S,9S,11E)-8,9,16-trihydroxy-3,4-dimethyl-14-(methylamino)-3,4,5,6,9,10-hexahydro-1H-2-benzoxacyclotetradecine-1,7(8H)-dione",E62,-,-,out,out,Type II,Y
+CDK8,CDK,CMGC,4f6s,A,-,Human,1-[3-tert-butyl-1-(4-methylphenyl)-1H-pyrazol-5-yl]urea,0SQ,-,-,out,in,Type II,Y
+CSF1R (FMS),PDGFR,TK,3bea,A,-,Human,"8-(2,3-dihydro-1H-inden-5-yl)-2-({4-[(3R,5S)-3,5-dimethylpiperazin-1-yl]phenyl}amino)-5-oxo-5,8-dihydropyrido[2,3-d]pyrimidine-6-carboxamide",IXH,-,-,out,in,Type II,Y
+CSF1R (FMS),PDGFR,TK,2i0y,A,-,Human,5-CYANO-FURAN-2-CARBOXYLIC ACID [5-HYDROXYMETHYL-2-(4-METHYL-PIPERIDIN-1-YL)-PHENYL]-AMIDE,5CN,-,-,out,in,Type II,Y
+CSF1R (FMS),PDGFR,TK,8cgc,A,B,Human,"[4-[4-[methyl-[(3-methylphenyl)methyl]amino]-7~{H}-pyrrolo[2,3-d]pyrimidin-6-yl]phenyl]methanol",UIK,(2S)-2-hydroxybutanedioic acid,LMR,out,in,Type II,Y
+MET,Met,TK,8ouv,A,A,Human,"5-(1H-indazol-7-yl)-1-[(1S)-1-phenylethyl]pyrimidine-2,4-dione",W3R,-,-,out,out,Type II,Y
+MET,Met,TK,8owg,A,-,Human,"5-[3,5-bis(fluoranyl)phenyl]-1-[(1S)-1-phenylethyl]pyrimidine-2,4-dione",W40,-,-,out,out,Type II,Y
+MET,Met,TK,8ov7,A,-,Human,"5-[3,5-bis(fluoranyl)phenyl]-1-[(1S)-1-[3-(1H-imidazol-5-yl)phenyl]ethyl]pyrimidine-2,4-dione",W3W,-,-,out,in,Type II,Y
+MET,Met,TK,8ovz,A,-,Human,"1-[(1S)-1-[3-(1H-imidazol-4-yl)phenyl]ethyl]-5-(1H-indazol-7-yl)pyrimidine-2,4-dione",W3N,-,-,out,out,Type II,Y
+MAP2K7,STE7,STE,6yg6,B,A,Human,~{N}-[4-[(4-ethylpiperazin-1-yl)methyl]-3-(trifluoromethyl)phenyl]-4-methyl-3-[2-[[(3~{S})-1-propanoylpyrrolidin-3-yl]amino]pyrimidin-4-yl]oxy-benzamide,OQ8,-,-,out,in,Type II,Y
+RIPK2,RIPK,TKL,5ar7,A,B,Human,"1-(5-TERT-BUTYL-1,2-OXAZOL-3-YL)-3-(4-PYRIDIN-4-YLOXYPHENYL)UREA",SR8,-,-,out,in,Type II,Y
+EPHA2 (EphA2),Eph,TK,8boc,A,A,Human,"~{N}-[3,5-bis(trifluoromethyl)phenyl]-4-methyl-3-[(1-methyl-6-pyridin-3-yl-pyrazolo[3,4-d]pyrimidin-4-yl)amino]benzamide",QUF,-,-,out,in,Type II,Y
+DDR1,DDR,TK,6hp9,B,-,Human,"(2~{R})-~{N}-[3-(4-methylimidazol-1-yl)-5-(trifluoromethyl)phenyl]-2-(pyrimidin-5-ylamino)-2,3-dihydro-1~{H}-indene-5-carboxamide",GKB,-,-,out,in,Type II,Y
+DDR1,DDR,TK,6fex,A,B,Human,"2-[4-bromanyl-2-oxidanylidene-1'-(1~{H}-pyrazolo[4,3-b]pyridin-5-ylcarbonyl)spiro[indole-3,4'-piperidine]-1-yl]-~{N}-[2,2,2-tris(fluoranyl)ethyl]ethanamide",D6Z,-,-,out,in,Type II,Y
+MAP3K7 (TAK1),MLK,TKL,5gjd,A,-,Human,"1-(4-((1H-pyrrolo[2,3-b]pyridin-4-yl)oxy)phenyl)-3-(5-(4-methylpiperazin-1-yl)naphthalen-2-yl)urea",6V3,-,-,out,in,Type II,Y
+CDK8,CDK,CMGC,4f7l,A,-,Human,tert-butyl [3-({[3-tert-butyl-1-(4-methylphenyl)-1H-pyrazol-5-yl]carbamoyl}amino)propyl]carbamate,0SO,-,-,out,in,Type II,Y
+MERTK (MER),Axl,TK,7xhy,A,-,Human,~{N}-[4-(2-azanyl-3-chloranyl-pyridin-4-yl)oxy-3-fluoranyl-phenyl]-5-(4-fluorophenyl)-4-oxidanylidene-1~{H}-pyridine-3-carboxamide,E0X,-,-,out,in,Type II,Y
+ALK,ALK,TK,5iug,A,A,Human,"N-[3-(4-{[(5-tert-butyl-1,2-oxazol-3-yl)carbamoyl]amino}-3-methylphenyl)-1H-pyrazol-5-yl]-4-[(4-methylpiperazin-1-yl)methyl]benzamide",729,-,-,out,in,Type II,Y
+EPHA2 (EphA2),Eph,TK,8boh,A,A,Human,"4-methyl-~{N}-[3-(4-methylimidazol-1-yl)-5-(trifluoromethyl)phenyl]-3-[(1-methyl-6-pyridin-3-yl-pyrazolo[3,4-d]pyrimidin-4-yl)amino]benzamide",R0T,-,-,out,in,Type II,Y
+EPHA2 (EphA2),Eph,TK,8boi,A,B,Human,"4-methyl-~{N}-[4-[(4-methylpiperazin-1-yl)methyl]-3-(trifluoromethyl)phenyl]-3-[(1-methyl-6-pyridin-3-yl-pyrazolo[3,4-d]pyrimidin-4-yl)amino]benzamide",R0O,-,-,out,in,Type II,Y
+KDR,VEGFR,TK,4agc,A,-,Human,AXITINIB,AXI,-,-,out,in,Type II,Y
+CSF1R (FMS),PDGFR,TK,7mfc,A,B,Human,Vimseltinib,Z6V,-,-,out,in,Type II,Y
+CSF1R (FMS),PDGFR,TK,6n33,A,-,Human,"6-fluoro-N-[(5-fluoro-2-methoxypyridin-3-yl)methyl]-5-[(5-methyl-1H-pyrrolo[2,3-b]pyridin-3-yl)methyl]pyridin-2-amine",622,-,-,out,in,Type II,Y
+CSF1R (FMS),PDGFR,TK,3krj,A,A,Human,4-cyano-N-(2-cyclohex-1-en-1-yl-4-piperidin-4-ylphenyl)-1H-imidazole-2-carboxamide,KRJ,-,-,out,in,Type II,Y
+CSF1R (FMS),PDGFR,TK,4hw7,A,-,Human,"5-[(5-methoxy-1H-pyrrolo[2,3-b]pyridin-3-yl)methyl]-N-[4-(trifluoromethyl)benzyl]pyridin-2-amine",64M,-,-,out,in,Type II,Y
+CSF1R (FMS),PDGFR,TK,6t2w,A,-,Human,2-[(4-methoxy-2-methyl-phenyl)amino]-7-methyl-9-(4-oxidanylcyclohexyl)purin-8-one,M9T,-,-,out,in,Type II,Y
+CSF1R (FMS),PDGFR,TK,6wxj,A,-,Human,"4-(3-{[(2S)-2-(6-methoxypyridin-3-yl)-2,3-dihydro-1,4-benzodioxin-6-yl]methyl}-3H-imidazo[4,5-b]pyridin-6-yl)-2-methylbut-3-yn-2-amine",UF4,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,8qqg,A,B,Human,"(3~{S})-~{N}-[4-methyl-3-[2-morpholin-4-yl-6-[[(2~{R})-1-oxidanylpropan-2-yl]amino]pyridin-4-yl]phenyl]-3-[2,2,2-tris(fluoranyl)ethyl]pyrrolidine-1-carboxamide",WJ9,-,-,out,in,Type II,Y
+MET,Met,TK,5hti,A,B,Human,"N-[3-fluoro-4-({7-[2-(morpholin-4-yl)ethoxy]-1,6-naphthyridin-4-yl}oxy)phenyl]-N'-(4-fluorophenyl)cyclopropane-1,1-dicarboxamide",66L,-,-,out,in,Type II,Y
+Ripk3 (RIPK3),RIPK,TKL,6oko,A,A,Mouse,"1-(4-fluorophenyl)-N-[3-fluoro-4-(1H-pyrrolo[2,3-b]pyridin-4-yloxy)phenyl]-2-oxo-1,2-dihydropyridine-3-carboxamide",1FN,-,-,out,in,Type II,Y
+EPHA2 (EphA2),Eph,TK,8bod,A,B,Human,"~{N}-[3,5-bis(chloranyl)phenyl]-4-methyl-3-[(1-methyl-6-pyridin-3-yl-pyrazolo[3,4-d]pyrimidin-4-yl)amino]benzamide",QTX,-,-,out,in,Type II,Y
+MERTK (MER),Axl,TK,7avx,B,-,Human,"1-(4-fluorophenyl)-N-[3-fluoro-4-[(3-phenyl-1H-pyrrolo[2,3-b]pyridin-4-yl)oxy]phenyl]-2,3-dimethyl-5-oxopyrazole-4-carboxamide",S4K,-,-,out,out,Type II,Y
+MET,Met,TK,3cth,A,-,Human,N-({4-[(2-aminopyridin-4-yl)oxy]-3-fluorophenyl}carbamoyl)-2-(4-fluorophenyl)acetamide,319,-,-,out,in,Type II,Y
+EPHA2 (EphA2),Eph,TK,8bom,A,B,Human,"~{N}-(3-methoxyphenyl)-4-methyl-3-[(1-methyl-6-pyridin-3-yl-pyrazolo[3,4-d]pyrimidin-4-yl)amino]benzamide",QU6,-,-,out,in,Type II,Y
+EPHA2 (EphA2),Eph,TK,8bok,A,A,Human,"~{N}-(3,5-dimethoxyphenyl)-4-methyl-3-[(1-methyl-6-pyridin-3-yl-pyrazolo[3,4-d]pyrimidin-4-yl)amino]benzamide",R0X,-,-,out,in,Type II,Y
+MET,Met,TK,9c1r,A,A,Human,"N-(2,5-difluoro-4-{[(1s,3S)-3-(1-methyl-1H-pyrazol-3-yl)cyclobutyl][(8R)-pyrazolo[1,5-a]pyrazin-4-yl]amino}phenyl)-2-(5-fluoropyridin-2-yl)-3-oxo-2,3-dihydropyridazine-4-carboxamide",A1ATS,-,-,out,in,Type II,Y
+FGR,Src,TK,7uy3,A,-,Human,"3-[(6,7-dimethoxyquinazolin-4-yl)oxy]-N-{4-[(4-ethylpiperazin-1-yl)methyl]-3-(trifluoromethyl)phenyl}-4-methylbenzamide",OJL,-,-,out,in,Type II,Y
+RIPK2,RIPK,TKL,5w5j,B,-,Human,"N-(2-chlorophenyl)pyrazolo[1,5-a]pyridine-3-carboxamide",9WS,-,-,out,out,Type II,Y
+DDR1,DDR,TK,5sb2,A,A,Human,"3-chloro-N-[(1R,2S)-2-phenylcyclopropyl]-5-{[(1H-pyrrolo[2,3-b]pyridin-5-yl)oxy]methyl}benzamide",1K2,-,-,out,in,Type II,Y
+DDR1,DDR,TK,5bvo,A,-,Human,"N-(5-{(1S)-1-[(5-fluoro-1,3-benzoxazol-2-yl)amino]ethyl}-2-methylphenyl)imidazo[1,2-a]pyridine-3-carboxamide",4VE,-,-,out,in,Type II,Y
+DDR1,DDR,TK,5bvk,A,-,Human,1-(2-chlorophenyl)-3-(pyridin-3-ylmethyl)urea,4VC,-,-,out,in,Type II,Y
+DDR1,DDR,TK,4ckr,A,A,Human,"4-[(4-ethylpiperazin-1-yl)methyl]-n-{4-methyl-3-[(2-oxo-2,3-dihydro-1h-indol-5-yl)oxy]phenyl}-3-(trifluoromethyl)benzamide",DI1,-,-,out,in,Type II,Y
+DDR1,DDR,TK,5sau,A,A,Human,3-[(6-aminopyridin-3-yl)ethynyl]-N-[3-(trifluoromethyl)phenyl]benzamide,1IF,-,-,out,in,Type II,Y
+DDR1,DDR,TK,5bvw,A,-,Human,"N-(2-CHLORO-6-METHYLPHENYL)-2-({6-[4-(2-HYDROXYETHYL)PIPERAZIN-1-YL]-2-METHYLPYRIMIDIN-4-YL}AMINO)-1,3-THIAZOLE-5-CARBOXAMIDE",1N1,-,-,out,in,Type II,Y
+DDR1,DDR,TK,6fin,A,B,Human,"3-[(3-cyclopropyl-1,2,4-oxadiazol-5-yl)methyl]-8-(1~{H}-indazol-5-ylcarbonyl)-1-phenyl-1,3,8-triazaspiro[4.5]decan-4-one",DJQ,-,-,out,in,Type II,Y
+MAP3K7 (TAK1),MLK,TKL,2yiy,A,-,Human,(1E)-1-[5-TERT-BUTYL-2-(3-FLUOROPHENYL)-1H-PYRAZOL-3-YLIDENE]-3-(4-PYRIDIN-3-YLOXYPHENYL)UREA,YIY,-,-,out,in,Type II,Y
+MAP3K7 (TAK1),MLK,TKL,4o91,A,-,Human,"N-{4-[(4-ethylpiperazin-1-yl)methyl]-3-(trifluoromethyl)phenyl}-4-methyl-3-(1H-pyrrolo[2,3-b]pyridin-4-yloxy)benzamide",NG2,-,-,out,in,Type II,Y
+ABL1,Abl,TK,2hz0,B,B,Human,"2-{[(6-OXO-1,6-DIHYDROPYRIDIN-3-YL)METHYL]AMINO}-N-[4-PROPYL-3-(TRIFLUOROMETHYL)PHENYL]BENZAMIDE",GIN,-,-,out,in,Type II,Y
+ABL1,Abl,TK,3qrk,A,-,Human,"(3S)-6-(3-tert-butyl-5-{[(2,3-dichlorophenyl)carbamoyl]amino}-1H-pyrazol-1-yl)-1,2,3,4-tetrahydroisoquinoline-3-carboxylic acid",9DP,-,-,out,in,Type II,Y
+ABL1,Abl,TK,2hiw,A,-,Human,"7-AMINO-1-METHYL-3-(2-METHYL-5-{[3-(TRIFLUOROMETHYL)BENZOYL]AMINO}PHENYL)-2-OXO-2,3-DIHYDROPYRIMIDO[4,5-D]PYRIMIDIN-1-IUM",7MP,-,-,out,in,Type II,Y
+ABL1,Abl,TK,5hu9,A,B,Human,4-[(4-methylpiperazin-1-yl)methyl]-N-(4-methyl-3-{[1-(pyridin-3-ylcarbonyl)piperidin-4-yl]oxy}phenyl)-3-(trifluoromethyl)benzamide,66K,4-[(4-methylpiperazin-1-yl)methyl]-N-(4-methyl-3-{[1-(pyridin-3-ylcarbonyl)piperidin-4-yl]oxy}phenyl)-3-(trifluoromethyl)benzamide,66K,out,in,Type II,Y
+ABL1,Abl,TK,2e2b,A,-,Human,"N-[3-(4,5'-BIPYRIMIDIN-2-YLAMINO)-4-METHYLPHENYL]-4-{[(3S)-3-(DIMETHYLAMINO)PYRROLIDIN-1-YL]METHYL}-3-(TRIFLUOROMETHYL)BENZAMIDE",406,-,-,out,in,Type II,Y
+KDR,VEGFR,TK,3b8q,A,-,Human,"N-(4-chlorophenyl)-6-[(6,7-dimethoxyquinolin-4-yl)oxy]naphthalene-1-carboxamide",900,-,-,out,in,Type II,Y
+KDR,VEGFR,TK,6xvk,A,-,Human,"~{N}-(4,4-dimethyl-2-prop-1-ynyl-3,1-benzoxazin-6-yl)-2-[3-methoxy-5-(7-methoxyquinolin-4-yl)oxy-pyridin-2-yl]ethanamide",O3E,-,-,out,in,Type II,Y
+KDR,VEGFR,TK,2rl5,A,-,Human,"N-(4-CHLOROPHENYL)-7-[(6,7-DIMETHOXYQUINOLIN-4-YL)OXY]-2,3-DIHYDRO-1,4-BENZOXAZINE-4-CARBOXAMIDE",2RL,-,-,out,in,Type II,Y
+KDR,VEGFR,TK,3vo3,A,B,Human,"N-[3-({2-[(cyclopropylcarbonyl)amino]imidazo[1,2-b]pyridazin-6-yl}oxy)phenyl]-1,3-dimethyl-1H-pyrazole-5-carboxamide",0KF,-,-,out,in,Type II,Y
+KDR,VEGFR,TK,3cpb,B,-,Human,"N'-(6-aminopyridin-3-yl)-N-(2-cyclopentylethyl)-4-methyl-benzene-1,3-dicarboxamide",C92,-,-,out,in,Type II,Y
+KDR,VEGFR,TK,3efl,B,-,Human,"N-(3,3-dimethyl-2,3-dihydro-1H-indol-6-yl)-2-[(pyridin-4-ylmethyl)amino]pyridine-3-carboxamide",706,-,-,out,in,Type II,Y
+KDR,VEGFR,TK,3vhe,A,-,Human,"1-{2-fluoro-4-[(5-methyl-5H-pyrrolo[3,2-d]pyrimidin-4-yl)oxy]phenyl}-3-[3-(trifluoromethyl)phenyl]urea",42Q,-,-,out,in,Type II,Y
+KDR,VEGFR,TK,2p2i,A,-,Human,N-(4-phenoxyphenyl)-2-[(pyridin-4-ylmethyl)amino]nicotinamide,608,-,-,out,in,Type II,Y
+KDR,VEGFR,TK,3vhk,A,-,Human,"{3-[(5-methyl-2-phenyl-1,3-oxazol-4-yl)methoxy]phenyl}methanol",BPK,-,-,out,in,Type II,Y
+KDR,VEGFR,TK,3ewh,A,-,Human,N-[4-({3-[2-(methylamino)pyrimidin-4-yl]pyridin-2-yl}oxy)naphthalen-1-yl]-6-(trifluoromethyl)-1H-benzimidazol-2-amine,K11,-,-,out,in,Type II,Y
+KDR,VEGFR,TK,3u6j,A,-,Human,"N-{4-[(6,7-dimethoxyquinolin-4-yl)oxy]-3-fluorophenyl}-1,5-dimethyl-3-oxo-2-phenyl-2,3-dihydro-1H-pyrazole-4-carboxamide",03X,-,-,out,in,Type II,Y
+KDR,VEGFR,TK,3dtw,B,-,Human,"6-chloro-N-pyrimidin-5-yl-3-{[3-(trifluoromethyl)phenyl]amino}-1,2-benzisoxazole-7-carboxamide",A96,-,-,out,in,Type II,Y
+KDR,VEGFR,TK,2qu6,A,-,Human,"4-({2-[(4-chloro-3-{[(2S)-1-methylpyrrolidin-2-yl]methoxy}phenyl)amino]-1,3-benzoxazol-5-yl}oxy)-N-methylpyridine-2-carboxamide",857,-,-,out,in,Type II,Y
+KDR,VEGFR,TK,3cp9,B,-,Human,"3-(2-aminoquinazolin-6-yl)-1-(3,3-dimethylindolin-6-yl)-4-methylpyridin-2(1H)-one",C19,-,-,out,in,Type II,Y
+KDR,VEGFR,TK,2oh4,A,B,Human,METHYL (5-{4-[({[2-FLUORO-5-(TRIFLUOROMETHYL)PHENYL]AMINO}CARBONYL)AMINO]PHENOXY}-1H-BENZIMIDAZOL-2-YL)CARBAMATE,GIG,-,-,out,in,Type II,Y
+KDR,VEGFR,TK,2xir,A,-,Human,"N,2-DIMETHYL-6-{[7-(2-MORPHOLIN-4-YLETHOXY)QUINOLIN-4-YL]OXY}-1-BENZOFURAN-3-CARBOXAMIDE",00J,-,-,out,in,Type II,Y
+KDR,VEGFR,TK,3cpc,A,-,Human,3-(2-aminoquinazolin-6-yl)-4-methyl-1-[3-(trifluoromethyl)phenyl]pyridin-2(1H)-one,C52,-,-,out,in,Type II,Y
+KDR,VEGFR,TK,2qu5,A,-,Human,4-[[2-[[4-chloro-3-(trifluoromethyl)phenyl]amino]-3H-benzimidazol-5-yl]oxy]-N-methyl-pyridine-2-carboxamide,276,-,-,out,in,Type II,Y
+JAK2,JakA,TK,7rn6,A,B,Human,"5-{[6-(acetylamino)pyrimidin-4-yl]oxy}-N-{4-[(4-methylpiperazin-1-yl)methyl]-3-(trifluoromethyl)phenyl}-2,3-dihydro-1H-indole-1-carboxamide",46,-,-,out,in,Type II,Y
+SYK,Syk,TK,3tud,A,-,Human,"N-{4-methyl-3-[8-methyl-7-oxo-2-(phenylamino)-7,8-dihydropyrido[2,3-d]pyrimidin-6-yl]phenyl}-3-(trifluoromethyl)benzamide",FPX,-,-,out,out,Type II,Y
+SYK,Syk,TK,3tub,A,-,Human,"1-{5-[(6,7-dimethoxyquinolin-4-yl)oxy]pyridin-2-yl}-3-[(1R,2S)-2-phenylcyclopropyl]urea",FPU,-,-,out,in,Type II,Y
+PDGFRA (PDGFRa),PDGFR,TK,5grn,A,B,Human,N-[2-(dimethylamino)ethyl]-N-[[4-[[4-methyl-3-[(4-pyridin-3-ylpyrimidin-2-yl)amino]phenyl]carbamoyl]phenyl]methyl]pyridine-3-carboxamide,748,-,-,out,in,Type II,Y
+KIT,PDGFR,TK,6xvb,A,-,Human,"~{N}-(4,4-dimethyl-2-propyl-3,1-benzoxazin-6-yl)-2-[3-methoxy-5-(7-methoxyquinolin-4-yl)oxy-pyridin-2-yl]ethanamide",O2H,-,-,out,in,Type II,Y
+KIT,PDGFR,TK,7zy6,A,-,Human,"5-imidazo[1,2-a]pyridin-3-yl-~{N}-[(1~{R})-1-(6-pyrrolidin-1-ylpyridin-3-yl)ethyl]pyridin-3-amine",KCI,-,-,out,in,Type II,Y
+DDR2,DDR,TK,6fer,C,-,Human,"2-[4,5-bis(fluoranyl)-2-oxidanylidene-1'-(1~{H}-pyrazolo[3,4-b]pyridin-5-ylcarbonyl)spiro[indole-3,4'-piperidine]-1-yl]-~{N}-[2,2,2-tris(fluoranyl)ethyl]ethanamide",D6Q,-,-,out,out,Type II,Y
+IGF1R,InsR,TK,8pym,A,-,Human,"5,5-dimethyl-1-(1H-pyrrolo[2,3-b]pyridin-4-ylmethyl)-3-[4-(trifluoromethylsulfanyl)phenyl]imidazolidine-2,4-dione",IED,-,-,out,in,Type II,Y
+EPHA7 (EphA7),Eph,TK,3dko,A,A,Human,5-[(2-methyl-5-{[3-(trifluoromethyl)phenyl]carbamoyl}phenyl)amino]pyridine-3-carboxamide,IHZ,-,-,out,in,Type II,Y
+IGF1R,InsR,TK,8pyk,A,A,Human,"5,5-dimethyl-1-(1H-pyrrolo[2,3-b]pyridin-3-ylmethyl)-3-[4-(trifluoromethylsulfanyl)phenyl]imidazolidine-2,4-dione",IC2,-,-,out,out,Type II,Y
+IGF1R,InsR,TK,8pyj,A,-,Human,"5,5-dimethyl-1-(quinolin-4-ylmethyl)-3-[4-(trifluoromethylsulfonyl)phenyl]imidazolidine-2,4-dione",IEA,-,-,out,in,Type II,Y
+IGF1R,InsR,TK,8pyn,A,A,Human,"5,5-dimethyl-1-(1H-pyrrolo[2,3-b]pyridin-4-ylmethyl)-3-[4-(trifluoromethylsulfonyl)phenyl]imidazolidine-2,4-dione",ICV,-,-,out,in,Type II,Y
+IGF1R,InsR,TK,8pyl,A,-,Human,"(5S)-5-methyl-1-(1H-pyrrolo[2,3-b]pyridin-4-ylmethyl)-3-[4-(trifluoromethylsulfanyl)phenyl]imidazolidine-2,4-dione",IE0,-,-,out,in,Type II,Y
+RIPK1,RIPK,TKL,4neu,A,B,Human,"1-[4-(1-aminoisoquinolin-5-yl)phenyl]-3-(5-tert-butyl-1,2-oxazol-3-yl)urea",Q1A,-,-,out,in,Type II,Y
+RIPK1,RIPK,TKL,5tx5,A,A,Human,GSK2982772,7MJ,-,-,out,out,Type II,Y
+RIPK1,RIPK,TKL,4itj,A,A,Human,N-[(1S)-1-(2-chloro-6-fluorophenyl)ethyl]-5-cyano-1-methyl-1H-pyrrole-2-carboxamide,1HX,-,-,out,out,Type II,Y
+RIPK1,RIPK,TKL,6nw2,A,B,Human,"(5R)-5-methyl-N-[(3S)-5-methyl-4-oxo-2,3,4,5-tetrahydro-1,5-benzoxazepin-3-yl]-4,5,6,7-tetrahydro-2H-indazole-3-carboxamide",L4Y,-,-,out,out,Type II,Y
+RIPK1,RIPK,TKL,6r5f,B,-,Human,"[(5~{S})-5-[3,5-bis(fluoranyl)phenyl]pyrazolidin-1-yl]-[1-(5-methyl-1,3,4-oxadiazol-2-yl)piperidin-4-yl]methanone",JSW,-,-,out,out,Type II,Y
+RIPK1,RIPK,TKL,6ocq,A,A,Human,"1-[(2S)-2-(3-fluorophenyl)pyrrolidin-1-yl]-2,2-dimethylpropan-1-one",M5J,-,-,out,out,Type II,Y
+RIPK1,RIPK,TKL,6c3e,A,A,Human,2-benzyl-5-nitro-1H-benzimidazole,EJY,-,-,out,out,Type II,Y
+RIPK1,RIPK,TKL,7xmk,A,-,Human,"5-[2-(cyclopropylcarbonylamino)-[1,2,4]triazolo[1,5-a]pyridin-7-yl]-N-[(1S)-1-(3-fluorophenyl)ethyl]-1-methyl-indole-3-carboxamide",GO4,-,-,out,out,Type II,Y
+RIPK1,RIPK,TKL,4ith,B,A,Human,"(5R)-5-[(7-chloro-1H-indol-3-yl)methyl]-3-methylimidazolidine-2,4-dione",RCM,-,-,out,out,Type II,Y
+RIPK1,RIPK,TKL,6rln,B,-,Human,"~{N}-[(3~{S})-7,9-bis(fluoranyl)-2-oxidanylidene-1,3,4,5-tetrahydro-1-benzazepin-3-yl]-3-(phenylmethyl)-1~{H}-1,2,4-triazole-5-carboxamide",K8K,-,-,out,out,Type II,Y
+RIPK1,RIPK,TKL,4iti,B,B,Human,"1-{(3S,3aS)-3-[3-fluoro-4-(trifluoromethoxy)phenyl]-8-methoxy-3,3a,4,5-tetrahydro-2H-benzo[g]indazol-2-yl}-2-hydroxyethanone",1HW,-,-,out,out,Type II,Y
+RIPK1,RIPK,TKL,6c4d,A,-,Human,"(3S)-3-(2-benzyl-3-chloro-7-oxo-2,4,5,7-tetrahydro-6H-pyrazolo[3,4-c]pyridin-6-yl)-5-methyl-4-oxo-2,3,4,5-tetrahydro-1,5-benzoxazepine-8-carbonitrile",EJP,-,-,out,out,Type II,Y
+RIPK1,RIPK,TKL,5hx6,B,-,Human,"5-benzyl-N-[(3S)-5-methyl-4-oxo-2,3,4,5-tetrahydro-1,5-benzoxazepin-3-yl]-1,2-oxazole-3-carboxamide",65U,-,-,out,out,Type II,Y
+RIPK1,RIPK,TKL,7fd0,A,-,Human,"N-[(3S)-5-methyl-7-[2-(oxan-4-yl)ethynyl]-4-oxidanylidene-2,3-dihydro-1,5-benzoxazepin-3-yl]-5-(phenylmethyl)-4H-1,2,4-triazole-3-carboxamide",3IU,-,-,out,out,Type II,Y
+RIPK1,RIPK,TKL,6hho,B,-,Human,"6-[4-[(5~{S})-5-[3,5-bis(fluoranyl)phenyl]pyrazolidin-1-yl]carbonylpiperidin-1-yl]pyrimidine-4-carbonitrile",G4W,-,-,out,out,Type II,Y
+RIPK1,RIPK,TKL,7ydx,A,B,Human,"1-methyl-5-[2-(2-methylpropanoylamino)-[1,2,4]triazolo[1,5-a]pyridin-7-yl]-N-[(1S)-1-phenylethyl]indole-3-carboxamide",3CI,-,-,out,out,Type II,Y
+RIPK1,RIPK,TKL,8i2n,A,-,Human,~{N}-methyl-1-[4-[[[1-methyl-5-(phenylmethyl)pyrazol-3-yl]carbonylamino]methyl]phenyl]benzimidazole-5-carboxamide,O4U,-,-,out,out,Type II,Y
+RIPK1,RIPK,TKL,6nyh,A,-,Human,"(5S)-N-[(3S)-7-methoxy-1-methyl-2-oxo-2,3,4,5-tetrahydro-1H-pyrido[3,4-b]azepin-3-yl]-5-phenyl-6,7-dihydro-5H-pyrrolo[1,2-b][1,2,4]triazole-2-carboxamide",L8D,-,-,out,out,Type II,Y
+CDK8,CDK,CMGC,4f6w,A,-,Human,N-[3-tert-butyl-1-(4-methylphenyl)-1H-pyrazol-5-yl]-4-[2-({[3-tert-butyl-1-(4-methylphenyl)-1H-pyrazol-5-yl]carbamoyl}amino)ethyl]piperazine-1-carboxamide,0SS,-,-,out,in,Type II,Y
+ALK,ALK,TK,5iuh,A,-,Human,"4-[(4-methylpiperazin-1-yl)methyl]-N-{3-[3-methyl-4-({[5-(propan-2-yl)-1,2-oxazol-3-yl]carbamoyl}amino)phenyl]-1H-pyrazol-5-yl}benzamide",34Y,-,-,out,in,Type II,Y
+TEK (TIE2),Tie,TK,4x3j,A,-,Human,"1-[4-(4-amino-5-oxopyrido[2,3-d]pyrimidin-8(5H)-yl)phenyl]-3-[2-fluoro-5-(trifluoromethyl)phenyl]urea",3WR,-,-,out,na,Type II,Y
+TEK (TIE2),Tie,TK,2p4i,A,-,Human,4-METHYL-3-({3-[2-(METHYLAMINO)PYRIMIDIN-4-YL]PYRIDIN-2-YL}OXY)-N-[2-MORPHOLIN-4-YL-5-(TRIFLUOROMETHYL)PHENYL]BENZAMIDE,MR9,-,-,out,out,Type II,Y
+TEK (TIE2),Tie,TK,2osc,A,-,Human,N-{4-METHYL-3-[(3-PYRIMIDIN-4-YLPYRIDIN-2-YL)AMINO]PHENYL}-3-(TRIFLUOROMETHYL)BENZAMIDE,MUH,-,-,out,in,Type II,Y
+CSF1R (FMS),PDGFR,TK,2i0v,A,-,Human,6-CHLORO-3-(3-METHYLISOXAZOL-5-YL)-4-PHENYLQUINOLIN-2(1H)-ONE,6C3,-,-,out,in,Type II,Y
+CSF1R (FMS),PDGFR,TK,7tnh,A,-,Human,"2,2-dimethyl-N-[(6-methyl-5-{[2-(1-methyl-1H-pyrazol-4-yl)pyridin-4-yl]oxy}pyridin-2-yl)carbamoyl]propanamide",I9W,-,-,out,in,Type II,Y
+MET,Met,TK,3ctj,A,A,Human,"2-(4-fluorophenyl)-N-{[3-fluoro-4-(1H-pyrrolo[2,3-b]pyridin-4-yloxy)phenyl]carbamoyl}acetamide",320,-,-,out,in,Type II,Y
+MET,Met,TK,3l8v,A,-,Human,"2-({4-[(2-aminopyridin-4-yl)oxy]-3-fluorophenyl}amino)-N-(2,4-difluorophenyl)pyridine-3-carboxamide",L8V,-,-,out,in,Type II,Y
+MET,Met,TK,6sdd,A,-,Human,"N-{4-[(2-amino-3-chloropyridin-4-yl)oxy]-3-fluorophenyl}-4-ethoxy-1-(4-fluorophenyl)-2-oxo-1,2-dihydropyridine-3-carboxamide",353,-,-,out,in,Type II,Y
+MET,Met,TK,3vw8,A,-,Human,"N-({4-[(6,7-dimethoxyquinolin-4-yl)oxy]phenyl}carbamothioyl)-2-phenylacetamide",DF6,-,-,out,in,Type II,Y
+MET,Met,TK,3rhk,B,-,Human,"1-[(3R,4R)-4-(1H-indol-3-yl)-2,5-dioxopyrrolidin-3-yl]pyrrolo[3,2,1-ij]quinolinium",M97,-,-,out,out,Type II,Y
+MET,Met,TK,3efj,A,-,Human,"2-benzyl-5-{4-[(6,7-dimethoxyquinolin-4-yl)oxy]-3-fluorophenyl}-3-methylpyrimidin-4(3H)-one",MT3,-,-,out,in,Type II,Y
+MET,Met,TK,3c1x,A,-,Human,"N-{[4-({5-[(4-aminopiperidin-1-yl)methyl]pyrrolo[2,1-f][1,2,4]triazin-4-yl}oxy)-3-fluorophenyl]carbamoyl}-2-(4-fluorophenyl)acetamide",CKK,-,-,out,in,Type II,Y
+FLT3,PDGFR,TK,6il3,A,A,Human,"7-methoxy-6-(1-methyl-1H-pyrazol-4-yl)-3-(pyridin-2-yl)imidazo[1,2-a]pyridine",A9R,3-CYCLOHEXYL-1-PROPYLSULFONIC ACID,CXS,out,in,Type II,Y
+FLT3,PDGFR,TK,4rt7,A,B,Human,"1-(5-tert-butyl-1,2-oxazol-3-yl)-3-(4-{7-[2-(morpholin-4-yl)ethoxy]imidazo[2,1-b][1,3]benzothiazol-2-yl}phenyl)urea",P30,-,-,out,in,Type II,Y
+FLT3,PDGFR,TK,5x02,A,-,Human,N-[(2S)-1-[5-[2-[(4-cyanophenyl)amino]-4-(propylamino)pyrimidin-5-yl]pent-4-ynylamino]-1-oxidanylidene-propan-2-yl]-4-(dimethylamino)-N-methyl-but-2-enamide,F6M,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,6xlo,A,-,Human,"3-(2-cyanopropan-2-yl)-N-[2-fluoro-4-methyl-5-(7-methyl-8-oxo-7,8-dihydropyrido[2,3-d]pyridazin-3-yl)phenyl]benzamide",V5J,-,-,out,in,Type II,Y
+BRAF,RAF,TKL,5val,B,-,Human,N-(3-tert-butylphenyl)-4-methyl-3-[6-(morpholin-4-yl)pyrimidin-4-yl]benzamide,92D,-,-,out,in,Type II,Y
+Abl1 (ABL1),Abl,TK,3kfa,A,-,Mouse,3-{(E)-2-[6-(cyclopropylamino)-9H-purin-9-yl]ethenyl}-4-methyl-N-[3-(4-methyl-1H-imidazol-1-yl)-5-(trifluoromethyl)phenyl]benzamide,B91,-,-,out,in,Type II,Y
+Abl1 (ABL1),Abl,TK,2hzn,A,-,Mouse,1-[4-(PYRIDIN-4-YLOXY)PHENYL]-3-[3-(TRIFLUOROMETHYL)PHENYL]UREA,KIN,-,-,out,in,Type II,Y
+DDR1,DDR,TK,6fiq,A,-,Human,"1-(1~{H}-indazol-5-ylcarbonyl)-5'-methoxy-1'-[2-oxidanylidene-2-[(2~{S})-2-(trifluoromethyl)pyrrolidin-1-yl]ethyl]spiro[piperidine-4,3'-pyrrolo[3,2-b]pyridine]-2'-one",DJW,-,-,out,in,Type II,Y
