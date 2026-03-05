@@ -29,7 +29,7 @@ df_in_filtered.to_csv("DFG-in_Gold_Standard.csv", index=False)
 
 # Merged CSV with all type I/II inhibitors
 df_merged = pd.concat([df_in_filtered, df_out_filtered], ignore_index=True)
-df_merged.to_csv("Merged_DFG.csv", index=False)
+df_merged.to_csv("data/known_inhibitors_curated.csv", index=False)
 
 # Number of inhibitors for each type
 print("Total DFG-in(type I) inhibitors: ", len(df_in_filtered) - 1)
