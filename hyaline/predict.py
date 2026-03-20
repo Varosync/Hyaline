@@ -168,21 +168,32 @@ def get_esm3_embeddings(sequence: str, device: str = 'cuda') -> np.ndarray:
             "Or: pip install 'hyaline[esm]'"
         )
 
-    model = ESM3.from_pretrained("esm3_sm_open_v1").to(device)
-    model.eval()
-    protein = ESMProtein(sequence=sequence)
+    try:
+        model = ESM3.from_pretrained("esm3_sm_open_v1").to(device)
+        model.eval()
+        protein = ESMProtein(sequence=sequence)
 
-    with torch.no_grad():
-        protein_tensor = model.encode(protein)
-        tokens = protein_tensor.sequence.unsqueeze(0).to(device)
-        embeddings = model.encoder.sequence_embed(tokens)
-        embeddings = embeddings.squeeze(0).float()
+        with torch.no_grad():
+            protein_tensor = model.encode(protein)
+            tokens = protein_tensor.sequence.unsqueeze(0).to(device)
+            embeddings = model.encoder.sequence_embed(tokens)
+            embeddings = embeddings.squeeze(0).float()
 
-        # Remove BOS/EOS tokens (match training pipeline)
-        if embeddings.shape[0] > len(sequence):
-            embeddings = embeddings[1:len(sequence)+1]
+            # Remove BOS/EOS tokens (match training pipeline)
+            if embeddings.shape[0] > len(sequence):
+                embeddings = embeddings[1:len(sequence)+1]
 
-    return embeddings.cpu().numpy()
+        return embeddings.cpu().numpy()
+    except Exception as e:
+        error_msg = str(e)
+        if 'gated' in error_msg.lower() or '401' in error_msg or 'login' in error_msg.lower():
+            raise RuntimeError(
+                f"ESM3 model requires HuggingFace authentication.\n"
+                f"  1. Accept the license at: https://huggingface.co/EvolutionaryScale/esm3-sm-open-v1\n"
+                f"  2. Log in: huggingface-cli login\n"
+                f"  Original error: {e}"
+            ) from e
+        raise RuntimeError(f"ESM3 embedding computation failed: {e}") from e
 
 
 def get_random_embeddings(sequence: str) -> np.ndarray:
