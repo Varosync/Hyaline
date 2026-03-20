@@ -1,0 +1,18 @@
+kinase_name,pdb,dfg,ac_helix,type,dfg_chelix_distance,Flag
+BRAF,4xv9,out,out,Type II,14.441313743591309,
+BRAF,4xv9,out,out,Type II,14.441401481628418,
+BTK,8tu4,na,out,Type I,17.877180099487305,
+BTK,8tu4,in,out,Type I,15.201091766357422,DFG-in but large distance
+BTK,8tu4,in,out,Type I,15.201091766357422,DFG-in but large distance
+CDK2,8ru8,in,out,Type I,21.73593711853028,DFG-in but large distance
+CDK2,8ru8,in,out,Type I,21.73552131652832,DFG-in but large distance
+DYRK1A,7a52,in,in,Type I,8.729266166687012,
+DYRK1A,7a52,in,in,Type I,8.729266166687012,
+FLT3,5x02,out,in,Type II,24.33700561523437,Ac-helix in but large distance
+JAK2,3lpb,in,in,Type I,7.312281608581543,
+JAK2,3lpb,in,in,Type I,12.279915809631348,DFG-in but large distance
+JAK2,3lpb,in,in,Type I,7.312281608581543,
+JAK2,3lpb,in,in,Type I,12.279915809631348,DFG-in but large distance
+MER,7avx,out,out,Type II,10.684228897094728,
+MER,7avx,in,out,Type I,9.07927417755127,Ac-helix out but small distance
+TIE2,2osc,out,in,Type II,13.442626953125,Ac-helix in but large distance
