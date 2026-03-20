@@ -21,12 +21,13 @@ def predict_command(args):
     pdb_path = args.input
     checkpoint = args.checkpoint
     device = args.device
+    allow_random = args.allow_random
     
     if not Path(pdb_path).exists():
         print(f"Error: File not found: {pdb_path}")
         sys.exit(1)
     
-    score, prediction = predict(pdb_path, checkpoint, device)
+    score, prediction = predict(pdb_path, checkpoint, device, allow_random)
     
     if score is None:
         sys.exit(1)
@@ -58,6 +59,12 @@ def main():
         default='cuda',
         choices=['cuda', 'cpu'],
         help='Device to run inference on (default: cuda)'
+    )
+    predict_parser.add_argument(
+        '--allow-random',
+        action='store_true',
+        default=False,
+        help='Allow random embeddings and untrained model (testing only)'
     )
     
     args = parser.parse_args()

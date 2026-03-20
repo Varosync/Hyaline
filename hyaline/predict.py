@@ -5,6 +5,8 @@ Hyaline Prediction Module
 
 Standalone prediction functionality for GPCR activation state.
 """
+import os
+import sys
 import torch
 import numpy as np
 from pathlib import Path
@@ -28,8 +30,74 @@ V2D_CONFIG = {
     'use_multiscale': False
 }
 
-# Default checkpoint path
-DEFAULT_CHECKPOINT = Path(__file__).parent.parent / 'checkpoints' / 'hyaline.pt'
+# GitHub Release URL for checkpoint auto-download
+CHECKPOINT_URL = (
+    "https://github.com/Varosync/Hyaline/releases/download/v2.0.0/hyaline.pt"
+)
+CHECKPOINT_CACHE_DIR = Path.home() / '.hyaline' / 'checkpoints'
+
+
+def download_checkpoint(url: str = CHECKPOINT_URL) -> Optional[Path]:
+    """Download checkpoint from GitHub Releases and cache locally."""
+    import urllib.request
+    import urllib.error
+
+    cache_path = CHECKPOINT_CACHE_DIR / 'hyaline.pt'
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
+
+    print(f"Downloading model checkpoint...")
+    print(f"  From: {url}")
+    print(f"  To:   {cache_path}")
+
+    try:
+        def _progress(block_num, block_size, total_size):
+            if total_size > 0:
+                pct = min(100, block_num * block_size * 100 // total_size)
+                mb = block_num * block_size / (1024 * 1024)
+                total_mb = total_size / (1024 * 1024)
+                print(f"\r  Progress: {pct}% ({mb:.1f}/{total_mb:.1f} MB)", end='', flush=True)
+
+        urllib.request.urlretrieve(url, str(cache_path), reporthook=_progress)
+        print()  # newline after progress
+        print(f"  ✓ Download complete")
+        return cache_path
+    except (urllib.error.URLError, urllib.error.HTTPError, OSError) as e:
+        print(f"\n  ✗ Download failed: {e}")
+        # Clean up partial download
+        if cache_path.exists():
+            cache_path.unlink()
+        return None
+
+
+def find_checkpoint() -> Optional[Path]:
+    """Search for checkpoint in standard locations, auto-downloading if needed."""
+    # 1. Environment variable (highest priority)
+    env_path = os.environ.get('HYALINE_CHECKPOINT')
+    if env_path and Path(env_path).exists():
+        return Path(env_path)
+
+    # 2. User home directory (~/.hyaline/checkpoints/)
+    home_path = CHECKPOINT_CACHE_DIR / 'hyaline.pt'
+    if home_path.exists():
+        return home_path
+
+    # 3. Relative to package (works for dev installs / cloned repo)
+    pkg_path = Path(__file__).parent.parent / 'checkpoints' / 'hyaline.pt'
+    if pkg_path.exists():
+        return pkg_path
+
+    # 4. Current working directory
+    cwd_path = Path.cwd() / 'checkpoints' / 'hyaline.pt'
+    if cwd_path.exists():
+        return cwd_path
+
+    # 5. Auto-download from GitHub Releases
+    print("\nCheckpoint not found locally. Attempting download...")
+    downloaded = download_checkpoint()
+    if downloaded:
+        return downloaded
+
+    return None
 
 
 def parse_pdb(pdb_path: str) -> Tuple[str, np.ndarray, str]:
@@ -68,23 +136,60 @@ def parse_pdb(pdb_path: str) -> Tuple[str, np.ndarray, str]:
 
 
 def get_esm3_embeddings(sequence: str, device: str = 'cuda') -> np.ndarray:
-    """Get ESM3 embeddings for a sequence."""
+    """Get ESM3 embeddings for a sequence.
+
+    Tries multiple import paths for compatibility across ESM package versions.
+    Raises RuntimeError if ESM3 is not available.
+    """
+    ESM3 = None
+    ESMProtein = None
+
+    # Try primary import path (esm >= 3.0)
     try:
-        from esm.models.esm3 import ESM3
-        from esm.sdk.api import ESMProtein
-        
-        model = ESM3.from_pretrained("esm3-open").to(device)
-        protein = ESMProtein(sequence=sequence)
-        
-        with torch.no_grad():
-            output = model.encode(protein)
-            embeddings = output.sequence_embeddings.cpu().numpy()
-        
-        return embeddings.squeeze(0)
-    except Exception as e:
-        print(f"ESM3 error: {e}")
-        print("Using random embeddings (for testing only)")
-        return np.random.randn(len(sequence), 1536).astype(np.float32)
+        from esm.models.esm3 import ESM3 as _ESM3
+        from esm.sdk.api import ESMProtein as _ESMProtein
+        ESM3, ESMProtein = _ESM3, _ESMProtein
+    except ImportError:
+        pass
+
+    # Try alternative import path
+    if ESM3 is None:
+        try:
+            from esm3 import ESM3 as _ESM3
+            from esm3.sdk.api import ESMProtein as _ESMProtein
+            ESM3, ESMProtein = _ESM3, _ESMProtein
+        except ImportError:
+            pass
+
+    if ESM3 is None:
+        raise RuntimeError(
+            "ESM3 package not found. Install it with:\n"
+            "  pip install 'esm>=3.0.0'\n"
+            "Or: pip install 'hyaline[esm]'"
+        )
+
+    model = ESM3.from_pretrained("esm3_sm_open_v1").to(device)
+    model.eval()
+    protein = ESMProtein(sequence=sequence)
+
+    with torch.no_grad():
+        protein_tensor = model.encode(protein)
+        tokens = protein_tensor.sequence.unsqueeze(0).to(device)
+        embeddings = model.encoder.sequence_embed(tokens)
+        embeddings = embeddings.squeeze(0).float()
+
+        # Remove BOS/EOS tokens (match training pipeline)
+        if embeddings.shape[0] > len(sequence):
+            embeddings = embeddings[1:len(sequence)+1]
+
+    return embeddings.cpu().numpy()
+
+
+def get_random_embeddings(sequence: str) -> np.ndarray:
+    """Generate random embeddings for testing only."""
+    print("WARNING: Using random embeddings (for testing only)")
+    print("         Results will NOT be meaningful.")
+    return np.random.randn(len(sequence), 1536).astype(np.float32)
 
 
 def build_radius_edges(coords: np.ndarray, cutoff: float = 10.0):
@@ -102,7 +207,8 @@ def build_radius_edges(coords: np.ndarray, cutoff: float = 10.0):
 def predict(
     pdb_path: str, 
     checkpoint_path: Optional[str] = None, 
-    device: str = 'cuda'
+    device: str = 'cuda',
+    allow_random: bool = False
 ) -> Tuple[Optional[float], Optional[str]]:
     """
     Predict GPCR activation state.
@@ -138,7 +244,15 @@ def predict(
     
     # Get embeddings
     print("\nComputing ESM3 embeddings...")
-    node_features = get_esm3_embeddings(sequence, device)
+    try:
+        node_features = get_esm3_embeddings(sequence, device)
+    except RuntimeError as e:
+        if allow_random:
+            node_features = get_random_embeddings(sequence)
+        else:
+            print(f"\nERROR: {e}")
+            print("\nTo run with random embeddings (testing only), use --allow-random")
+            sys.exit(1)
     node_features = node_features[:n_residues]
     
     # Edge features
@@ -162,17 +276,29 @@ def predict(
     print("\nLoading model...")
     model = HyalineV2(**V2D_CONFIG).to(device)
     
-    ckpt_path = checkpoint_path or str(DEFAULT_CHECKPOINT)
-    if Path(ckpt_path).exists():
-        checkpoint = torch.load(ckpt_path, map_location=device, weights_only=False)
+    if checkpoint_path:
+        ckpt_path = Path(checkpoint_path)
+    else:
+        ckpt_path = find_checkpoint()
+
+    if ckpt_path and ckpt_path.exists():
+        checkpoint = torch.load(str(ckpt_path), map_location=device, weights_only=False)
         if 'model_state_dict' in checkpoint:
             model.load_state_dict(checkpoint['model_state_dict'])
         else:
             model.load_state_dict(checkpoint)
         print(f"Loaded: {ckpt_path}")
+    elif allow_random:
+        print("WARNING: No checkpoint found. Using untrained model.")
+        print("         Results will NOT be meaningful.")
     else:
-        print(f"Warning: Checkpoint not found: {ckpt_path}")
-        print("Using untrained model (results will be random)")
+        print("ERROR: Model checkpoint not found.")
+        print("Please provide the checkpoint in one of these locations:")
+        print(f"  1. Set env var: HYALINE_CHECKPOINT=/path/to/hyaline.pt")
+        print(f"  2. Place at:    ~/.hyaline/checkpoints/hyaline.pt")
+        print(f"  3. Place at:    ./checkpoints/hyaline.pt")
+        print(f"  4. Pass flag:   hyaline predict --checkpoint /path/to/hyaline.pt")
+        sys.exit(1)
     
     model.eval()
     

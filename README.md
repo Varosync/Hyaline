@@ -29,12 +29,31 @@ git clone https://github.com/Varosync/Hyaline.git
 cd Hyaline; pip install -e .
 ```
 
+For ESM3 embeddings (required for meaningful predictions):
+```bash
+pip install 'hyaline[esm]'
+# or: pip install 'esm>=3.0.0'
+```
+
 Requirements: Python 3.10+, PyTorch 2.0+, PyTorch Geometric
 
 ## Inference
 
 ```bash
+hyaline predict structure.pdb --device cpu
+```
+
+The model checkpoint will be **automatically downloaded** on first use and cached at `~/.hyaline/checkpoints/hyaline.pt`. You can also provide a checkpoint manually:
+
+```bash
+# Option 1: Pass directly
+hyaline predict structure.pdb --checkpoint /path/to/hyaline.pt
+
+# Option 2: Environment variable
+export HYALINE_CHECKPOINT=/path/to/hyaline.pt
 hyaline predict structure.pdb
+
+# Option 3: Place in ~/.hyaline/checkpoints/hyaline.pt
 ```
 
 Output:
@@ -46,6 +65,10 @@ HYALINE PREDICTION
 ```
 
 Scores >0.5 indicate active state, <0.5 indicate inactive state. Higher absolute values indicate greater confidence.
+
+### ESM3 Model
+
+HYALINE was trained using **ESM3 small open v1** (`esm3_sm_open_v1`) embeddings (1536-dim). The same model is used at inference time. If ESM3 is not installed, you will see a clear error with installation instructions.
 
 ## Architecture
 
