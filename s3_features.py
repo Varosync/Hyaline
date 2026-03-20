@@ -16,4 +16,4 @@ subset.loc[(subset["ac_helix"] == "out") & (subset["dfg_chelix_distance"] < 10),
 subset.loc[(subset["dfg"] == "in") & (subset["dfg_chelix_distance"] > 10), "Flag"] = "DFG-in but large distance"
 subset.loc[(subset["dfg"] == "out") & (subset["dfg_chelix_distance"] < 10), "Flag"] = "DFG-out but large distance"
 
-subset.to_csv("targeted_kinases", index = False)
+subset.to_csv("targeted_kinases.csv", index = False)
