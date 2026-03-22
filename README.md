@@ -66,6 +66,37 @@ HYALINE PREDICTION
 
 Scores >0.5 indicate active state, <0.5 indicate inactive state. Higher absolute values indicate greater confidence.
 
+### Batch Prediction
+
+To score an entire directory of PDB files at once:
+
+```bash
+hyaline predict /path/to/pdb_directory/
+```
+
+This will process every `.pdb` file in the directory, print a ranked summary table sorted by activation score, and save a CSV file to the input directory:
+
+```
+RESULTS  (ranked by activation score)
+======================================================================
+  Rank  File                                      Score  State     Confidence
+  1     7D7M_clean.pdb                           0.9712  Active    High
+  2     6OS0_receptor.pdb                         0.9534  Active    High
+  ...
+  Active:    187 /  300
+  Inactive:  113 /  300
+======================================================================
+  Results saved to: /path/to/pdb_directory/hyaline_results.csv
+```
+
+Use `--output` to specify a custom CSV path:
+
+```bash
+hyaline predict my_structures/ --output results.csv --device cpu
+```
+
+The CSV contains columns: `rank`, `file`, `score`, `prediction`, `confidence` — ready for downstream analysis in Python, R, or Excel.
+
 ### ESM3 Model
 
 HYALINE was trained using **ESM3 small open v1** (`esm3_sm_open_v1`) embeddings (1536-dim). The same model is used at inference time. If ESM3 is not installed, you will see a clear error with installation instructions.
