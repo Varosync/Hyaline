@@ -162,10 +162,16 @@ def get_esm3_embeddings(sequence: str, device: str = 'cuda') -> np.ndarray:
             pass
 
     if ESM3 is None:
+        import sys
+        if sys.version_info < (3, 10):
+            version_msg = f"\n\nNOTE: ESM3 requires Python >= 3.10. You are using Python {sys.version_info.major}.{sys.version_info.minor}."
+        else:
+            version_msg = ""
+            
         raise RuntimeError(
             "ESM3 package not found. Install it with:\n"
             "  pip install 'esm>=3.0.0'\n"
-            "Or: pip install 'hyaline[esm]'"
+            f"Or: pip install 'hyaline[esm]'{version_msg}"
         )
 
     try:
@@ -215,11 +221,24 @@ def build_radius_edges(coords: np.ndarray, cutoff: float = 10.0):
     return edge_index, distances
 
 
+def _classify(score: float) -> Tuple[str, str]:
+    """Derive prediction label and confidence from a raw score."""
+    prediction = 'Active' if score > 0.5 else 'Inactive'
+    if score > 0.90 or score < 0.10:
+        confidence = "High"
+    elif score > 0.75 or score < 0.25:
+        confidence = "Medium"
+    else:
+        confidence = "Low"
+    return prediction, confidence
+
+
 def predict(
     pdb_path: str, 
     checkpoint_path: Optional[str] = None, 
     device: str = 'cuda',
-    allow_random: bool = False
+    allow_random: bool = False,
+    quiet: bool = False
 ) -> Tuple[Optional[float], Optional[str]]:
     """
     Predict GPCR activation state.
@@ -228,6 +247,8 @@ def predict(
         pdb_path: Path to PDB file
         checkpoint_path: Path to model checkpoint (optional)
         device: 'cuda' or 'cpu'
+        allow_random: Allow random embeddings for testing
+        quiet: Suppress per-file output (used in batch mode)
     
     Returns:
         score: Activation probability (0-1)
@@ -235,26 +256,28 @@ def predict(
     """
     from torch_geometric.data import Data
     
-    print("=" * 60)
-    print("HYALINE PREDICTION")
-    print("=" * 60)
+    log = (lambda *a, **kw: None) if quiet else print
+    
+    log("=" * 60)
+    log("HYALINE PREDICTION")
+    log("=" * 60)
     
     # Parse PDB
-    print(f"\nInput: {pdb_path}")
+    log(f"\nInput: {pdb_path}")
     sequence, ca_coords, chain = parse_pdb(pdb_path)
     n_residues = len(ca_coords)
-    print(f"Residues: {n_residues}")
+    log(f"Residues: {n_residues}")
     
     if n_residues < 50:
-        print("Error: Structure too short for GPCR prediction")
+        log("Error: Structure too short for GPCR prediction")
         return None, None
     
     # Build edges
     edge_index, distances = build_radius_edges(ca_coords, cutoff=10.0)
-    print(f"Edges: {edge_index.shape[1]}")
+    log(f"Edges: {edge_index.shape[1]}")
     
     # Get embeddings
-    print("\nComputing ESM3 embeddings...")
+    log("\nComputing ESM3 embeddings...")
     try:
         node_features = get_esm3_embeddings(sequence, device)
     except RuntimeError as e:
@@ -284,7 +307,7 @@ def predict(
     ).to(device)
     
     # Load model
-    print("\nLoading model...")
+    log("\nLoading model...")
     model = HyalineV2(**V2D_CONFIG).to(device)
     
     if checkpoint_path:
@@ -298,10 +321,10 @@ def predict(
             model.load_state_dict(checkpoint['model_state_dict'])
         else:
             model.load_state_dict(checkpoint)
-        print(f"Loaded: {ckpt_path}")
+        log(f"Loaded: {ckpt_path}")
     elif allow_random:
-        print("WARNING: No checkpoint found. Using untrained model.")
-        print("         Results will NOT be meaningful.")
+        log("WARNING: No checkpoint found. Using untrained model.")
+        log("         Results will NOT be meaningful.")
     else:
         print("ERROR: Model checkpoint not found.")
         print("Please provide the checkpoint in one of these locations:")
@@ -318,31 +341,119 @@ def predict(
         logits, _ = model(data)
         score = torch.sigmoid(logits).item()
     
-    prediction = 'Active' if score > 0.5 else 'Inactive'
-    
-    # Confidence
-    if score > 0.90 or score < 0.10:
-        confidence = "High"
-    elif score > 0.75 or score < 0.25:
-        confidence = "Medium"
-    else:
-        confidence = "Low"
+    prediction, confidence = _classify(score)
     
     # Results
-    print("\n" + "=" * 60)
-    print("RESULTS")
-    print("=" * 60)
-    print(f"  Score:       {score:.4f}")
-    print(f"  Prediction:  {prediction}")
-    print(f"  Confidence:  {confidence}")
-    print("=" * 60)
+    log("\n" + "=" * 60)
+    log("RESULTS")
+    log("=" * 60)
+    log(f"  Score:       {score:.4f}")
+    log(f"  Prediction:  {prediction}")
+    log(f"  Confidence:  {confidence}")
+    log("=" * 60)
     
     return score, prediction
+
+
+def predict_batch(
+    pdb_dir: str,
+    checkpoint_path: Optional[str] = None,
+    device: str = 'cuda',
+    allow_random: bool = False,
+    output_csv: Optional[str] = None
+) -> list:
+    """
+    Run batch prediction on a directory of PDB files.
+
+    Prints a live progress line per file, a ranked summary table at the end,
+    and writes results to a CSV for downstream analysis.
+
+    Returns:
+        List of (filename, score, prediction, confidence) tuples sorted by
+        score descending.
+    """
+    pdb_dir = Path(pdb_dir)
+    pdb_files = sorted(pdb_dir.glob('*.pdb'))
+
+    if not pdb_files:
+        print(f"Error: No .pdb files found in {pdb_dir}")
+        sys.exit(1)
+
+    n = len(pdb_files)
+    print("=" * 70)
+    print("HYALINE BATCH PREDICTION")
+    print(f"Directory:  {pdb_dir}")
+    print(f"PDB files:  {n}")
+    print("=" * 70)
+
+    results = []
+    failed = []
+
+    for i, pdb_file in enumerate(pdb_files, 1):
+        name = pdb_file.name
+        print(f"  [{i:>{len(str(n))}}/{n}] {name:<40s}", end="", flush=True)
+        try:
+            score, prediction = predict(
+                str(pdb_file), checkpoint_path, device, allow_random, quiet=True
+            )
+            if score is not None:
+                _, confidence = _classify(score)
+                results.append((name, score, prediction, confidence))
+                print(f" {score:.4f}  {prediction}")
+            else:
+                failed.append((name, "Too short (<50 residues)"))
+                print(" SKIPPED (too short)")
+        except Exception as e:
+            failed.append((name, str(e)))
+            print(f" ERROR")
+
+    # Sort by score descending for ranking
+    results.sort(key=lambda r: r[1], reverse=True)
+
+    n_active = sum(1 for r in results if r[2] == 'Active')
+    n_inactive = len(results) - n_active
+
+    # Summary table
+    print("\n" + "=" * 70)
+    print("RESULTS  (ranked by activation score)")
+    print("=" * 70)
+    print(f"  {'Rank':<6}{'File':<40}{'Score':>7}  {'State':<10}{'Confidence'}")
+    print(f"  {'-'*5} {'-'*39} {'-'*7}  {'-'*9} {'-'*10}")
+    for rank, (name, score, pred, conf) in enumerate(results, 1):
+        print(f"  {rank:<6}{name:<40}{score:>7.4f}  {pred:<10}{conf}")
+
+    if failed:
+        print(f"\n  Skipped / errors ({len(failed)}):")
+        for name, reason in failed:
+            print(f"    {name}: {reason}")
+
+    print(f"\n  Active:   {n_active:>4} / {len(results)}")
+    print(f"  Inactive: {n_inactive:>4} / {len(results)}")
+    if failed:
+        print(f"  Failed:   {len(failed):>4}")
+    print("=" * 70)
+
+    # Write CSV
+    csv_path = Path(output_csv) if output_csv else pdb_dir / "hyaline_results.csv"
+    with open(csv_path, 'w') as f:
+        f.write("rank,file,score,prediction,confidence\n")
+        for rank, (name, score, pred, conf) in enumerate(results, 1):
+            f.write(f"{rank},{name},{score:.4f},{pred},{conf}\n")
+    print(f"\n  Results saved to: {csv_path}")
+
+    return results
 
 
 if __name__ == '__main__':
     import sys
     if len(sys.argv) < 2:
-        print("Usage: python -m hyaline.predict <pdb_file>")
+        print("Usage: python -m hyaline.predict <pdb_file_or_directory>")
         sys.exit(1)
-    predict(sys.argv[1])
+    input_path = Path(sys.argv[1])
+    if not input_path.exists():
+        print(f"Error: Path not found: {sys.argv[1]}")
+        sys.exit(1)
+    if input_path.is_dir():
+        predict_batch(sys.argv[1])
+    else:
+        predict(sys.argv[1])

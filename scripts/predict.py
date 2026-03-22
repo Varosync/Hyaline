@@ -134,8 +134,20 @@ def parse_pdb(pdb_path: str):
 
 def get_esm3_embeddings(sequence: str, device='cuda'):
     """Get ESM3 embeddings for sequence."""
-    from esm.models.esm3 import ESM3
-    from esm.sdk.api import ESMProtein
+    try:
+        from esm.models.esm3 import ESM3
+        from esm.sdk.api import ESMProtein
+    except ImportError:
+        import sys
+        if sys.version_info < (3, 10):
+            version_msg = f"\n\nNOTE: ESM3 requires Python >= 3.10. You are using Python {sys.version_info.major}.{sys.version_info.minor}."
+        else:
+            version_msg = ""
+        raise RuntimeError(
+            "ESM3 package not found. Install it with:\n"
+            "  pip install 'esm>=3.0.0'\n"
+            f"Or: pip install 'hyaline[esm]'{version_msg}"
+        )
     
     model = ESM3.from_pretrained("esm3_sm_open_v1").to(device)
     model.eval()
@@ -155,7 +167,26 @@ def get_esm3_embeddings(sequence: str, device='cuda'):
     return embeddings.cpu().numpy()
 
 
-def predict(pdb_path: str, checkpoint_path: str = None, device: str = 'cuda'):
+def _classify(score):
+    """Derive prediction label, confidence, and interpretation from score."""
+    prediction = 'Active' if score > 0.5 else 'Inactive'
+    if score > 0.90:
+        confidence, interpretation = "High", "Strong active-state geometric signature"
+    elif score > 0.75:
+        confidence, interpretation = "Medium-High", "Likely active; review structural features"
+    elif score > 0.50:
+        confidence, interpretation = "Medium", "Probable active state"
+    elif score > 0.25:
+        confidence, interpretation = "Medium", "Probable inactive state"
+    elif score > 0.10:
+        confidence, interpretation = "Medium-High", "Likely inactive; check for partial activation"
+    else:
+        confidence, interpretation = "High", "Strong inactive-state geometric profile"
+    return prediction, confidence, interpretation
+
+
+def predict(pdb_path: str, checkpoint_path: str = None, device: str = 'cuda',
+            quiet: bool = False):
     """
     Predict GPCR activation state using HyalineV2-D.
     
@@ -163,36 +194,39 @@ def predict(pdb_path: str, checkpoint_path: str = None, device: str = 'cuda'):
         pdb_path: Path to PDB file
         checkpoint_path: Path to model checkpoint (default: checkpoints/hyaline.pt)
         device: Device to run inference on
+        quiet: Suppress per-file output (used in batch mode)
     
     Returns:
         score: Activation probability (0-1)
         prediction: 'Active' or 'Inactive'
     """
-    print("=" * 60)
-    print("HYALINE V2-D PREDICTION")
-    print("Geometric Deep Learning for GPCR Activation State")
-    print("=" * 60)
+    log = (lambda *a, **kw: None) if quiet else print
+
+    log("=" * 60)
+    log("HYALINE V2-D PREDICTION")
+    log("Geometric Deep Learning for GPCR Activation State")
+    log("=" * 60)
     
     # Parse PDB
-    print(f"\nInput: {pdb_path}")
+    log(f"\nInput: {pdb_path}")
     sequence, ca_coords, chain = parse_pdb(pdb_path)
     n_residues = len(ca_coords)
-    print(f"Chain: {chain}")
-    print(f"Residues: {n_residues}")
+    log(f"Chain: {chain}")
+    log(f"Residues: {n_residues}")
     
     if n_residues < 100:
-        print("WARNING: Very short sequence, may not be a full GPCR")
+        log("WARNING: Very short sequence, may not be a full GPCR")
     
     # Build graph edges
     edge_index, distances = build_radius_edges(ca_coords, cutoff=10.0)
     n_edges = edge_index.shape[1]
-    print(f"Graph edges (10Å cutoff): {n_edges}")
+    log(f"Graph edges (10Å cutoff): {n_edges}")
     
     # Get ESM3 embeddings
-    print("\nComputing ESM3 embeddings...")
+    log("\nComputing ESM3 embeddings...")
     node_features = get_esm3_embeddings(sequence, device)
     node_features = node_features[:n_residues]
-    print(f"Embedding shape: {node_features.shape}")
+    log(f"Embedding shape: {node_features.shape}")
     
     # Compute edge features
     dist_sq = (distances ** 2).astype(np.float32) / 100.0
@@ -214,7 +248,7 @@ def predict(pdb_path: str, checkpoint_path: str = None, device: str = 'cuda'):
     ).to(device)
     
     # Load model
-    print("\nLoading HyalineV2-D model...")
+    log("\nLoading HyalineV2-D model...")
     model = HyalineV2(**V2D_CONFIG).to(device)
     
     checkpoint_path = checkpoint_path or DEFAULT_CHECKPOINT
@@ -224,7 +258,7 @@ def predict(pdb_path: str, checkpoint_path: str = None, device: str = 'cuda'):
             model.load_state_dict(checkpoint['model_state_dict'])
         else:
             model.load_state_dict(checkpoint)
-        print(f"Loaded: {checkpoint_path}")
+        log(f"Loaded: {checkpoint_path}")
     else:
         print(f"ERROR: Checkpoint not found: {checkpoint_path}")
         return None, None
@@ -236,39 +270,89 @@ def predict(pdb_path: str, checkpoint_path: str = None, device: str = 'cuda'):
         logits, attention = model(data)
         score = torch.sigmoid(logits).item()
     
-    # Interpret score
-    prediction = 'Active' if score > 0.5 else 'Inactive'
-    
-    if score > 0.90:
-        confidence = "High"
-        interpretation = "Strong active-state geometric signature"
-    elif score > 0.75:
-        confidence = "Medium-High"
-        interpretation = "Likely active; review structural features"
-    elif score > 0.50:
-        confidence = "Medium"
-        interpretation = "Probable active state"
-    elif score > 0.25:
-        confidence = "Medium"
-        interpretation = "Probable inactive state"
-    elif score > 0.10:
-        confidence = "Medium-High"
-        interpretation = "Likely inactive; check for partial activation"
-    else:
-        confidence = "High"
-        interpretation = "Strong inactive-state geometric profile"
+    prediction, confidence, interpretation = _classify(score)
     
     # Print results
-    print("\n" + "=" * 60)
-    print("PREDICTION RESULTS")
-    print("=" * 60)
-    print(f"  Score:          {score:.4f}")
-    print(f"  Prediction:     {prediction}")
-    print(f"  Confidence:     {confidence}")
-    print(f"  Interpretation: {interpretation}")
-    print("=" * 60)
+    log("\n" + "=" * 60)
+    log("PREDICTION RESULTS")
+    log("=" * 60)
+    log(f"  Score:          {score:.4f}")
+    log(f"  Prediction:     {prediction}")
+    log(f"  Confidence:     {confidence}")
+    log(f"  Interpretation: {interpretation}")
+    log("=" * 60)
     
     return score, prediction
+
+
+def predict_batch(pdb_dir, checkpoint_path=None, device='cuda', output_csv=None):
+    """Run batch prediction on a directory of PDB files with summary output."""
+    pdb_dir = Path(pdb_dir)
+    pdb_files = sorted(pdb_dir.glob('*.pdb'))
+
+    if not pdb_files:
+        print(f"ERROR: No .pdb files found in {pdb_dir}")
+        sys.exit(1)
+
+    n = len(pdb_files)
+    print("=" * 70)
+    print("HYALINE V2-D BATCH PREDICTION")
+    print(f"Directory:  {pdb_dir}")
+    print(f"PDB files:  {n}")
+    print("=" * 70)
+
+    results = []
+    failed = []
+
+    for i, pdb_file in enumerate(pdb_files, 1):
+        name = pdb_file.name
+        print(f"  [{i:>{len(str(n))}}/{n}] {name:<40s}", end="", flush=True)
+        try:
+            score, prediction = predict(
+                str(pdb_file), checkpoint_path, device, quiet=True
+            )
+            if score is not None:
+                _, confidence, _ = _classify(score)
+                results.append((name, score, prediction, confidence))
+                print(f" {score:.4f}  {prediction}")
+            else:
+                failed.append((name, "Too short"))
+                print(" SKIPPED (too short)")
+        except Exception as e:
+            failed.append((name, str(e)))
+            print(" ERROR")
+
+    results.sort(key=lambda r: r[1], reverse=True)
+    n_active = sum(1 for r in results if r[2] == 'Active')
+    n_inactive = len(results) - n_active
+
+    print("\n" + "=" * 70)
+    print("RESULTS  (ranked by activation score)")
+    print("=" * 70)
+    print(f"  {'Rank':<6}{'File':<40}{'Score':>7}  {'State':<10}{'Confidence'}")
+    print(f"  {'-'*5} {'-'*39} {'-'*7}  {'-'*9} {'-'*10}")
+    for rank, (name, score, pred, conf) in enumerate(results, 1):
+        print(f"  {rank:<6}{name:<40}{score:>7.4f}  {pred:<10}{conf}")
+
+    if failed:
+        print(f"\n  Skipped / errors ({len(failed)}):")
+        for name, reason in failed:
+            print(f"    {name}: {reason}")
+
+    print(f"\n  Active:   {n_active:>4} / {len(results)}")
+    print(f"  Inactive: {n_inactive:>4} / {len(results)}")
+    if failed:
+        print(f"  Failed:   {len(failed):>4}")
+    print("=" * 70)
+
+    csv_path = Path(output_csv) if output_csv else pdb_dir / "hyaline_results.csv"
+    with open(csv_path, 'w') as f:
+        f.write("rank,file,score,prediction,confidence\n")
+        for rank, (name, score, pred, conf) in enumerate(results, 1):
+            f.write(f"{rank},{name},{score:.4f},{pred},{conf}\n")
+    print(f"\n  Results saved to: {csv_path}")
+
+    return results
 
 
 def main():
@@ -288,19 +372,25 @@ Score Interpretation:
     < 0.10  High-confidence Inactive
         """
     )
-    parser.add_argument('pdb_file', help='Path to PDB structure file')
+    parser.add_argument('pdb_file', help='Path to PDB structure file or directory of PDB files')
     parser.add_argument('--checkpoint', default=None, 
                         help=f'Model checkpoint path (default: {DEFAULT_CHECKPOINT})')
     parser.add_argument('--device', default='cuda' if torch.cuda.is_available() else 'cpu',
                         help='Device to run on (cuda/cpu)')
+    parser.add_argument('--output', '-o', default=None,
+                        help='Output CSV path for batch results (default: <input_dir>/hyaline_results.csv)')
     
     args = parser.parse_args()
+    input_path = Path(args.pdb_file)
     
-    if not Path(args.pdb_file).exists():
-        print(f"ERROR: PDB file not found: {args.pdb_file}")
+    if not input_path.exists():
+        print(f"ERROR: Path not found: {args.pdb_file}")
         sys.exit(1)
     
-    predict(args.pdb_file, args.checkpoint, args.device)
+    if input_path.is_dir():
+        predict_batch(str(input_path), args.checkpoint, args.device, args.output)
+    else:
+        predict(str(input_path), args.checkpoint, args.device)
 
 
 if __name__ == '__main__':
