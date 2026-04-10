@@ -29,6 +29,7 @@ from .models.kinase_binding import (
     KinaseBindingConfig,
     KLIFSLoader,
 )
+from .models.conformational_prior import ConformationalPrior, ConformationalPriorConfig
 
 # Feature extractors
 from .features.geometric import GeometricFeatureExtractor, extract_from_pdb_file
@@ -37,7 +38,7 @@ from .features.classical import ClassicalFeatureExtractor, NormalModeGenerator
 # GPCR data (legacy)
 from .data import load_dataset_with_motifs
 
-__version__ = "2.1.0"
+__version__ = "2.2.0"
 __all__ = [
     # Kinase
     'KinaseBindingPredictor',
@@ -46,6 +47,8 @@ __all__ = [
     'SpikingEGNN',
     'SpikingEGNNConfig',
     'SpikingEGNNLayer',
+    'ConformationalPrior',
+    'ConformationalPriorConfig',
     # Legacy GPCR
     'HyalineV2',
     'count_params_v2',

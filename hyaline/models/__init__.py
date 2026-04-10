@@ -18,6 +18,11 @@ from .kinase_binding import (
     KLIFSLoader,
 )
 
+from .conformational_prior import (
+    ConformationalPrior,
+    ConformationalPriorConfig,
+)
+
 __all__ = [
     'SpikingEGNN',
     'SpikingEGNNConfig',
@@ -25,4 +30,6 @@ __all__ = [
     'KinaseBindingPredictor',
     'KinaseBindingConfig',
     'KLIFSLoader',
+    'ConformationalPrior',
+    'ConformationalPriorConfig',
 ]

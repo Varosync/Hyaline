@@ -1,0 +1,9 @@
+{
+  "dataset_path": "data/klifs_with_bioactivity.csv",
+  "expected_row_count": 13325,
+  "sha256_hash": "9d123b273ee959f3efe9f39e104dffc9eed4ad20229b263b2d0e907d53a1f668",
+  "creation_date": "2026-03-12",
+  "manifest_generated": "2026-04-09T23:27:53.224134",
+  "klifs_api_version": "v2",
+  "description": "KLIFS kinase structures with pocket geometry, compound descriptors, and BindingDB bioactivity"
+}

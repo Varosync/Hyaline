@@ -296,11 +296,74 @@ class KLIFSClient:
         
         return structures
     
-    def get_pocket_coordinates(self, structure_id: int) -> Optional[np.ndarray]:
-        """Get 3D coordinates for pocket residues (85 CA atoms)."""
-        # This would require PDB file parsing
-        # For now, return None - coordinates loaded from PDB files
-        return None
+    def get_pocket_coordinates(
+        self,
+        structure_id: int,
+        pocket_seq: Optional[str] = None,
+    ) -> Optional[np.ndarray]:
+        """Get Cα coordinates for the 85 KLIFS pocket residues.
+
+        Parses the cached KLIFS complex PDB and returns shape (85, 3).
+        Gap positions get [0, 0, 0].
+        """
+        from pathlib import Path as _Path
+
+        pdb_cache = _Path("data/klifs_pockets") / str(structure_id) / "complex.pdb"
+        if not pdb_cache.exists():
+            # Try downloading via API
+            try:
+                resp = self.session.get(
+                    f"{self.BASE_URL}/structure_get_pdb_complex",
+                    params={"structure_ID": structure_id},
+                    timeout=30,
+                )
+                resp.raise_for_status()
+                pdb_cache.parent.mkdir(parents=True, exist_ok=True)
+                pdb_cache.write_text(resp.text)
+            except Exception as e:
+                logger.warning("Failed to fetch PDB for %d: %s", structure_id, e)
+                return None
+
+        pdb_text = pdb_cache.read_text()
+
+        # Parse Cα coordinates
+        ca_coords = []
+        for line in pdb_text.splitlines():
+            if line.startswith("ATOM") and line[12:16].strip() == "CA":
+                if line[16:17] not in (" ", "A"):
+                    continue
+                try:
+                    x = float(line[30:38])
+                    y = float(line[38:46])
+                    z = float(line[46:54])
+                    ca_coords.append([x, y, z])
+                except ValueError:
+                    continue
+
+        if not ca_coords:
+            return None
+
+        all_ca = np.array(ca_coords, dtype=np.float32)
+
+        # Get pocket sequence if not provided
+        if pocket_seq is None:
+            structures = self.get_structures(kinase_id=None, pdb_codes=[])
+            # Fallback: use all Cα, padded/truncated to 85
+            pocket_seq = "A" * min(len(all_ca), 85)
+
+        # Map resolved pocket positions to Cα coords
+        result = np.zeros((85, 3), dtype=np.float32)
+        n_resolved = sum(1 for ch in pocket_seq if ch not in ('-', '_', ' ', ''))
+        available = min(n_resolved, len(all_ca))
+
+        resolved_count = 0
+        for pos, ch in enumerate(pocket_seq[:85]):
+            if ch not in ('-', '_', ' ', ''):
+                if resolved_count < available:
+                    result[pos] = all_ca[resolved_count]
+                resolved_count += 1
+
+        return result
     
     # =========================================================================
     # High-Level Methods

@@ -279,6 +279,15 @@ class SpikingEGNN(nn.Module):
         
         return h, pos, all_spikes
     
+    def set_threshold(self, threshold: float) -> None:
+        """Set base threshold for all layers (for annealing).
+        
+        Start low (0.3) so spikes fire easily with diverse patterns,
+        anneal up to 1.0 so the model learns meaningful synchronization.
+        """
+        for layer in self.layers:
+            layer.base_threshold = threshold
+
     def get_sync_score(self, all_spikes: torch.Tensor) -> torch.Tensor:
         """Compute synchronization from layer spikes.
         

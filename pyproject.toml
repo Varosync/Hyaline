@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "hyaline"
 version = "2.0.0"
-description = "Geometric Deep Learning for GPCR Activation State Prediction"
+description = "Geometric Deep Learning for GPCR and Kinase Conformational State Prediction"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
@@ -38,7 +38,16 @@ dependencies = [
 esm = ["esm>=3.0.0"]
 viz = ["matplotlib>=3.7.0", "seaborn>=0.13.0"]
 neuromorphic = ["norse>=0.0.7", "snnTorch>=0.6.0"]
-all = ["esm>=3.0.0", "matplotlib>=3.7.0", "seaborn>=0.13.0", "scikit-learn>=1.2.0", "norse>=0.0.7", "snnTorch>=0.6.0"]
+kinase = [
+    "rdkit>=2024.3.1",
+    "biopython>=1.81",
+    "torch-geometric>=2.3.0",
+    "scikit-learn>=1.2.0",
+    "pandas>=2.0.0",
+    "requests>=2.28.0",
+    "matplotlib>=3.7.0",
+]
+all = ["esm>=3.0.0", "matplotlib>=3.7.0", "seaborn>=0.13.0", "scikit-learn>=1.2.0", "norse>=0.0.7", "snnTorch>=0.6.0", "rdkit>=2024.3.1", "pandas>=2.0.0", "requests>=2.28.0"]
 
 [project.scripts]
 hyaline = "hyaline.cli:main"

@@ -232,6 +232,19 @@ class ZINCClient:
             logger.error(f"Failed to fetch ZINC compound {zinc_id}: {e}")
             return None
         
+
+    def ping(self) -> bool:
+        """Check if ZINC API is reachable."""
+        try:
+            response = requests.get(
+                f"{self.BASE_URL}/substances",
+                timeout=self.timeout,
+                params={"count": 1},
+            )
+            return response.status_code == 200
+        except Exception:
+            return False
+
     def filter_by_price(
         self,
         compounds: List[ZINCCompound],

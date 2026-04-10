@@ -29,11 +29,15 @@ git clone https://github.com/Varosync/Hyaline.git
 cd Hyaline; pip install -e .
 ```
 
-For ESM3 embeddings (required for meaningful predictions):
+For ESM3 embeddings (required for meaningful predictions, as used in the paper):
 ```bash
 pip install 'hyaline[esm]'
 # or: pip install 'esm>=3.0.0'
 ```
+
+**Important:** The `esm3_sm_open_v1` model is gated by EvolutionaryScale. You must accept the license and log in:
+1. Accept the license at [HuggingFace: esm3-sm-open-v1](https://huggingface.co/EvolutionaryScale/esm3-sm-open-v1)
+2. Run `huggingface-cli login` in your terminal and provide your HF token.
 
 Requirements: Python 3.10+, PyTorch 2.0+, PyTorch Geometric
 

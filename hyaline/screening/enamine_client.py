@@ -191,6 +191,18 @@ class EnamineClient:
             logger.warning("Enamine REAL requires license or catalog download")
             return []
         
+
+    def ping(self) -> bool:
+        """Check if Enamine API is reachable."""
+        try:
+            response = requests.get(
+                f"{self.BASE_URL}/status",
+                timeout=self.timeout,
+            )
+            return response.status_code == 200
+        except Exception:
+            return False
+
     def filter_by_price_and_leadtime(
         self,
         compounds: List[EnamineCompound],
