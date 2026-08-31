@@ -151,10 +151,25 @@ def _structure_from_pdb(pdb: str) -> Optional[Dict]:
 # Public API
 # ---------------------------------------------------------------------------
 
+def _load_pocket_extract():
+    """Load pocket_extract by path so analyze works standalone or as a package."""
+    import importlib.util
+    import sys
+    p = os.path.join(os.path.dirname(__file__), "pocket_extract.py")
+    spec = importlib.util.spec_from_file_location("hyaline_kinase_pocket_extract", p)
+    m = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = m
+    spec.loader.exec_module(m)
+    return m
+
+
 def analyze(
-    identifier,
+    identifier=None,
     provenance: str = "experimental",
     local_mol2: Optional[str] = None,
+    local_pdb: Optional[str] = None,
+    kinase: Optional[str] = None,
+    chain: Optional[str] = None,
 ) -> AnalysisResult:
     """Annotate one kinase structure.
 
@@ -166,16 +181,42 @@ def analyze(
     provenance : str
         ``experimental`` (default), ``predicted`` (e.g. AlphaFold), or ``unknown``.
     local_mol2 : str, optional
-        Path to a KLIFS-format 85-residue pocket ``.mol2``. When given, coordinates
-        are read from this file instead of KLIFS (use for predicted models).
+        Path to a KLIFS-format 85-residue pocket ``.mol2`` (coordinates read directly).
+    local_pdb : str, optional
+        Path to an arbitrary PDB (crystal or predicted/AlphaFold). Requires
+        ``kinase``; the 85-residue pocket is extracted by aligning to a KLIFS
+        reference for that kinase.
+    kinase : str, optional
+        Kinase name (required with ``local_pdb``).
+    chain : str, optional
+        Chain to use in ``local_pdb`` (default: the chain with the most residues).
     """
     warnings: list = []
     achelix_state, achelix_source = "unknown", "not_computed"
-    source = "local_mol2" if local_mol2 else (
-        "klifs_structure_id" if isinstance(identifier, int) else "pdb")
+    ca = None
+    if local_pdb:
+        source = "local_pdb"
+    elif local_mol2:
+        source = "local_mol2"
+    elif isinstance(identifier, int):
+        source = "klifs_structure_id"
+    else:
+        source = "pdb"
 
     # --- obtain pocket coordinates ---
-    if local_mol2:
+    if local_pdb:
+        if not kinase:
+            raise ValueError("local_pdb requires the 'kinase' argument")
+        pe = _load_pocket_extract()
+        ca, info = pe.extract_pocket_ca(local_pdb, kinase, chain=chain)
+        identifier = identifier or os.path.basename(local_pdb)
+        if info["pocket_positions_mapped"] < 60:
+            warnings.append(f"only {info['pocket_positions_mapped']}/85 pocket "
+                            "positions mapped; descriptors may be unreliable")
+        if info["identity_to_reference"] < 0.5:
+            warnings.append(f"low identity to KLIFS reference "
+                            f"({info['identity_to_reference']}); wrong kinase?")
+    elif local_mol2:
         with open(local_mol2) as f:
             mol2 = f.read()
     elif isinstance(identifier, int):
@@ -194,7 +235,8 @@ def analyze(
         achelix_state = str(meta.get("aC_helix") or "unknown")
         achelix_source = "klifs_annotation"
 
-    ca = _parse_pocket_ca(mol2)
+    if ca is None:  # not the local_pdb path
+        ca = _parse_pocket_ca(mol2)
     dist = _dfg_achelix_distance(ca)
     angle = _hinge_activation_angle(ca)
     n_res = len(ca)

@@ -34,12 +34,20 @@ def main():
     ap.add_argument("identifier", nargs="?", help="PDB code present in KLIFS")
     ap.add_argument("--klifs-id", type=int, help="KLIFS structure_ID")
     ap.add_argument("--local", help="Path to a KLIFS-format 85-residue pocket .mol2")
+    ap.add_argument("--pdb-file", help="Path to an arbitrary PDB (crystal or AlphaFold); needs --kinase")
+    ap.add_argument("--kinase", help="Kinase name (required with --pdb-file)")
+    ap.add_argument("--chain", help="Chain to use in --pdb-file (default: longest)")
     ap.add_argument("--provenance", default="experimental",
                     choices=["experimental", "predicted", "unknown"],
                     help="Tag input as experimental or predicted (AlphaFold)")
     args = ap.parse_args()
 
-    if args.local:
+    if args.pdb_file:
+        if not args.kinase:
+            ap.error("--pdb-file requires --kinase")
+        res = analyze(args.identifier, provenance=args.provenance,
+                      local_pdb=args.pdb_file, kinase=args.kinase, chain=args.chain)
+    elif args.local:
         ident = args.identifier or Path(args.local).stem
         res = analyze(ident, provenance=args.provenance, local_mol2=args.local)
     elif args.klifs_id is not None:
@@ -47,7 +55,7 @@ def main():
     elif args.identifier:
         res = analyze(args.identifier, provenance=args.provenance)
     else:
-        ap.error("provide a PDB code, --klifs-id, or --local <file>")
+        ap.error("provide a PDB code, --klifs-id, --local <mol2>, or --pdb-file <pdb> --kinase <name>")
 
     print(json.dumps(res.to_dict(), indent=2))
 

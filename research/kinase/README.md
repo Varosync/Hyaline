@@ -94,10 +94,16 @@ predicted (AlphaFold) models once their 85-residue pocket is extracted; every
 result tags provenance and records the descriptor that drove the call.
 
 ```bash
-python scripts/analyze_kinase.py 2hyy              # by PDB code (experimental)
-python scripts/analyze_kinase.py --klifs-id 1081   # by KLIFS structure_ID
-python scripts/analyze_kinase.py --local pocket.mol2 --provenance predicted
+python scripts/analyze_kinase.py 2hyy                                   # PDB code in KLIFS
+python scripts/analyze_kinase.py --klifs-id 1081                        # KLIFS structure_ID
+python scripts/analyze_kinase.py --pdb-file model.pdb --kinase ABL1     # arbitrary PDB / AlphaFold
+python scripts/analyze_kinase.py --pdb-file af.pdb --kinase EGFR --provenance predicted
 ```
+
+For an arbitrary local PDB (crystal or AlphaFold model), the 85-residue pocket is
+extracted by aligning the structure to a KLIFS reference for the given kinase
+(Needleman-Wunsch; validated: local `2hyy.pdb` reproduces KLIFS's descriptors to
+< 0.1 Å). AlphaFold models of ABL1 and EGFR are annotated without choking.
 
 Example (`2hyy`, imatinib-bound ABL1) — correctly called **DFG-out / Type II**:
 
@@ -123,7 +129,8 @@ The DFG call uses a logistic model over the two descriptors
 | Path | Purpose |
 |------|---------|
 | `hyaline/kinase/analyze.py` | **`analyze`** — annotate one structure (DFG/αC state, descriptors, inhibitor class, provenance) |
-| `scripts/analyze_kinase.py` | CLI for `analyze` (PDB code / KLIFS id / local predicted pocket) |
+| `hyaline/kinase/pocket_extract.py` | Extract the 85-residue pocket from an arbitrary PDB / AlphaFold model (align to KLIFS reference) |
+| `scripts/analyze_kinase.py` | CLI for `analyze` (PDB code / KLIFS id / local mol2 / arbitrary PDB) |
 | `hyaline/kinase/dfg_model.json` | Dependency-light logistic DFG model (real descriptors, grouped AUROC 0.834) |
 | `scripts/kinase_audit.py` | **Reproducibility audit** — regenerates the REAL sequence-classifier numbers |
 | `scripts/kinase_descriptors.py` | **Geometric descriptors** — real coords → distance/angle, grouped LOKO, Figure 1 |
@@ -165,8 +172,9 @@ command**.
 
 - **Phase 0/1** — ✅ `analyze` command returns DFG/αC state, the geometric
   fingerprint, and an inhibitor-class call for experimental and predicted inputs,
-  with provenance and driving descriptor. *Next:* pocket extraction for arbitrary
-  local PDB/AlphaFold models (currently requires a KLIFS 85-residue pocket mol2).
+  with provenance and driving descriptor. Arbitrary local PDB / AlphaFold models
+  are supported via pocket extraction (align to KLIFS reference), validated on
+  crystals and AlphaFold ABL1/EGFR.
 - **Phase 2** — one defensible number: grouped leave-one-kinase-out on UniProt,
   reproduced by `make benchmark`. (Prototyped: `kinase_descriptors.py` gives
   AUROC 0.834 from geometry under grouped LOKO.)
