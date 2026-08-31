@@ -124,6 +124,29 @@ The DFG call uses a logistic model over the two descriptors
 
 ---
 
+## Atlas
+
+A browsable, downloadable map of human kinases in KLIFS.
+
+```bash
+python scripts/build_kinase_atlas.py       # writes research/kinase/atlas/
+```
+
+Outputs (`research/kinase/atlas/`):
+- `index.html` — offline page (no external assets): searchable table + scatter
+  (DFG-to-αC distance vs hinge angle, colored by DFG state). Open it in a browser.
+- `kinase_atlas.parquet` / `.csv` — one row per kinase (loads in pandas).
+
+Each kinase row carries: accessible DFG states, structure counts, known Type I /
+Type II inhibitors, a **Type-II-opportunity score** (heuristic: well-studied
+kinases that reach DFG-out but have few known Type II inhibitors rank high), and
+a geometric descriptor fingerprint where computed. Current build: **318 kinases
+with structures, 13,325 structures**; per-kinase counts reconcile against KLIFS.
+Descriptor fingerprints/scatter currently cover the 12 kinases with computed
+descriptors (grow by extending `kinase_descriptors.py`).
+
+---
+
 ## Codebase
 
 | Path | Purpose |
@@ -134,6 +157,7 @@ The DFG call uses a logistic model over the two descriptors
 | `hyaline/kinase/dfg_model.json` | Dependency-light logistic DFG model (real descriptors, grouped AUROC 0.834) |
 | `scripts/kinase_audit.py` | **Reproducibility audit** — regenerates the REAL sequence-classifier numbers |
 | `scripts/kinase_descriptors.py` | **Geometric descriptors** — real coords → distance/angle, grouped LOKO, Figure 1 |
+| `scripts/build_kinase_atlas.py` | **Atlas** — per-kinase table + offline HTML (search + scatter) |
 | `research/kinase/paper/` | Figure 1 + descriptor CSV artifacts |
 | `hyaline/features/kinase_geometry.py` | Geometric descriptors (DFG–αC distance, hinge angle) |
 | `hyaline/loaders/klifs_loader.py` | KLIFS API client |
@@ -178,6 +202,7 @@ command**.
 - **Phase 2** — one defensible number: grouped leave-one-kinase-out on UniProt,
   reproduced by `make benchmark`. (Prototyped: `kinase_descriptors.py` gives
   AUROC 0.834 from geometry under grouped LOKO.)
-- **Phase 3** — the atlas: browsable/downloadable map of every human kinase
-  (DFG distance vs hinge angle, colored by state).
+- **Phase 3** — ✅ atlas: browsable/downloadable map (`scripts/build_kinase_atlas.py`;
+  318 kinases, offline HTML + parquet). *Next:* grow descriptor coverage beyond
+  the current 12 kinases.
 - **Phase 4/5** — Colab/UI + PyMOL export; clean-clone release with artifacts.
