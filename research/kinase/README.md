@@ -31,7 +31,8 @@ evaluation that lets the same kinase appear in train and test).
 | Static EGNN / Spiking EGNN | R² = −0.064 / −0.089 (did not converge; spiking no better, p = 0.125) | SYNTHETIC | `python scripts/kinase_ablation.py` |
 | DFG classifier, pocket sequence, **ungrouped** | acc 0.893, AUROC 0.946 | LEAKY | `python scripts/kinase_audit.py` |
 | DFG classifier, pocket sequence, **grouped LOKO** | acc 0.711, **AUROC 0.62** | REAL | `python scripts/kinase_audit.py` |
-| DFG separation, **geometric descriptor** (training-free) | **AUROC 0.796** | REAL | `python scripts/kinase_audit.py` |
+| DFG separation, geometric distance alone (training-free) | AUROC 0.844 | REAL | `python scripts/kinase_descriptors.py` |
+| DFG classifier, **2 geometric descriptors, grouped LOKO** | acc 0.80, **AUROC 0.834** | REAL | `python scripts/kinase_descriptors.py` |
 | Known-drug Type I/II validation | 5 / 6 correct | REAL | `python scripts/klifs_validation.py` |
 
 Majority-class baseline for DFG state is **0.792** — note the grouped sequence
@@ -49,20 +50,24 @@ train and test) AUROC collapses to **0.62** — barely above random. The
 model memorize identity rather than learn conformation. Always report the
 grouped number.
 
-### 2. A single real geometric descriptor beats the sequence model, without leakage
-Parsing real Cα coordinates from KLIFS (`structure_get_pocket` mol2) and
-computing the **DFG-to-αC-helix distance**:
+### 2. Real geometric descriptors beat the sequence model, without leakage
+Parsing real Cα coordinates from KLIFS (`structure_get_pocket` mol2, 85 pocket
+residues) we compute two interpretable, training-free descriptors: the
+**DFG-to-αC-helix distance** and the **hinge / activation-loop angle** at the
+catalytic lysine. On 621 structures across 15 kinases:
 
-| DFG state | distance |
-|---|---|
-| DFG-in  | 10.8 ± 1.6 Å |
-| DFG-out | 12.9 ± 2.3 Å |
+- The **distance alone** classifies DFG state at **AUROC 0.844** — no training,
+  no possible leakage (it is a fixed physical measurement).
+- **Both descriptors** under **grouped leave-one-kinase-out** reach
+  **AUROC 0.834** (accuracy 0.80) — versus **0.62** for the leakage-corrected
+  sequence model.
 
-The raw distance, with **no training and no possible leakage**, classifies DFG
-state at **AUROC 0.796** — better than the leakage-corrected sequence model
-(0.62). (Note: the classes overlap; the README's old "16–22 Å for DFG-out"
-claim does not hold for this centroid definition.) Adding the hinge angle and a
-grouped classifier is the next step.
+![Figure 1](paper/figure1_descriptors.png)
+
+*Figure 1 — DFG-in (blue) separates from DFG-out (orange) along the
+DFG-to-αC distance; the classes overlap in the 10–14 Å band (the old
+"16–22 Å for DFG-out" claim does not hold for this centroid definition), but a
+grouped classifier still generalizes across kinases at 0.834 AUROC.*
 
 ---
 
@@ -85,7 +90,9 @@ Results are written to `checkpoints/kinase_audit.json` and cached under
 
 | Path | Purpose |
 |------|---------|
-| `scripts/kinase_audit.py` | **Reproducibility audit** — regenerates the REAL numbers above |
+| `scripts/kinase_audit.py` | **Reproducibility audit** — regenerates the REAL sequence-classifier numbers |
+| `scripts/kinase_descriptors.py` | **Geometric descriptors** — real coords → distance/angle, grouped LOKO, Figure 1 |
+| `research/kinase/paper/` | Figure 1 + descriptor CSV artifacts |
 | `hyaline/features/kinase_geometry.py` | Geometric descriptors (DFG–αC distance, hinge angle) |
 | `hyaline/loaders/klifs_loader.py` | KLIFS API client |
 | `hyaline/loaders/klifs_pipeline.py` | Feature-extraction pipeline |
@@ -125,7 +132,8 @@ command**.
   DFG/αC state, the geometric fingerprint, and an inhibitor-class call, for both
   crystals and predicted (AlphaFold) models.
 - **Phase 2** — one defensible number: grouped leave-one-kinase-out on UniProt,
-  reproduced by `make benchmark`. (Prototyped in `kinase_audit.py`.)
+  reproduced by `make benchmark`. (Prototyped: `kinase_descriptors.py` gives
+  AUROC 0.834 from geometry under grouped LOKO.)
 - **Phase 3** — the atlas: browsable/downloadable map of every human kinase
   (DFG distance vs hinge angle, colored by state).
 - **Phase 4/5** — Colab/UI + PyMOL export; clean-clone release with artifacts.
