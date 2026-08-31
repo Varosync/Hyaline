@@ -1,0 +1,14 @@
+{
+  "features": [
+    "dfg_achelix_distance_A",
+    "hinge_activation_angle_deg"
+  ],
+  "weights": [
+    0.9875839883835874,
+    0.05555830120309265
+  ],
+  "intercept": -14.671587178466199,
+  "positive_class": "DFG-out",
+  "n_train": 621,
+  "note": "logistic on real KLIFS geometric descriptors; grouped LOKO AUROC 0.834"
+}
