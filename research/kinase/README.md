@@ -94,6 +94,31 @@ so the number generalizes to unseen kinases and does not leak identity.
 *DFG-in (blue) separates from DFG-out (orange) along the DFG-to-αC distance; a
 grouped classifier generalizes across kinases at 0.834 AUROC.*
 
+## Release
+
+Entry points via `make` (or run the `python` commands directly on Windows):
+
+```bash
+make install     # deps
+make analyze ARGS="2hyy"
+make benchmark   # grouped leave-one-kinase-out -> checkpoints/kinase_benchmark.json + splits.csv
+make atlas       # offline atlas
+make verify      # smoke test: analyze + benchmark + atlas must all succeed
+```
+
+Attached artifacts:
+
+| Artifact | Path |
+|---|---|
+| Atlas (parquet / csv / html) | `research/kinase/atlas/` |
+| Benchmark splits (LOKO folds + OOF preds) | `research/kinase/paper/splits.csv` |
+| Figure 1 + descriptor table | `research/kinase/paper/` |
+| DFG model checkpoint | `hyaline/kinase/dfg_model.json` |
+| Abstract | `research/kinase/paper/ABSTRACT.md` |
+
+A clean checkout runs install → analyze → benchmark → atlas with nothing failing
+(`make verify`).
+
 ## Findings (honest, command-backed)
 
 Every number is tagged **REAL** (real KLIFS data), **SYNTHETIC** (model on invented
@@ -159,7 +184,8 @@ predicted**, **determinism**, and **every claim backed by a command**.
   descriptor coverage beyond the current 12 kinases.
 - **Phase 4** — ✅ `--pymol` export + Colab notebook + README rebuilt around
   install / quickstart / atlas / benchmark / Colab.
-- **Phase 5** — release: clean-clone install → analyze → benchmark → atlas with
-  nothing failing; attach parquet/CSV/HTML/splits/checkpoint; fold the atlas,
-  AlphaFold annotation, inhibitor-class output, and the leave-one-kinase-out
-  number into the abstract.
+- **Phase 5** — ✅ release: `make verify` runs install → analyze → benchmark →
+  atlas with nothing failing; artifacts attached (parquet/CSV/HTML/splits/model);
+  the atlas, AlphaFold annotation, inhibitor-class output, and the
+  leave-one-kinase-out number (0.834) are folded into
+  `research/kinase/paper/ABSTRACT.md`.
