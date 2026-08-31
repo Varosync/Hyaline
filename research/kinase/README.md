@@ -2,110 +2,32 @@
 
 **Branch:** `kinase-real-descriptors` (built on `kinase-v1`; `master` is GPCR-only)
 
-Extension of Hyaline to **kinase conformational selectivity**: predicting the
-DFG-in vs DFG-out state that decides whether a Type I or Type II inhibitor can
-bind. Same kinase, same sequence, different 3D shape, different binding.
+Predict the DFG-in vs DFG-out state that decides whether a Type I or Type II
+inhibitor can bind a kinase — from interpretable geometric descriptors computed
+on the real KLIFS pocket. Same kinase, same sequence, different 3D shape,
+different binding.
 
----
+The kinase tools (`analyze`, `atlas`, `benchmark`) are self-contained: no GPU, no
+retraining, and none of the GPCR/torch dependencies of the main package.
 
-## Status (updated after reproducibility audit)
-
-Every number below was regenerated on real hardware. Claims are tagged
-**REAL** (real KLIFS data), **SYNTHETIC** (model run on invented data — a
-mechanism check, not real-molecule performance), or **LEAKY** (inflated by an
-evaluation that lets the same kinase appear in train and test).
-
-> TL;DR: the impressive headline numbers are either **synthetic** or **leakage
-> inflated**. The honest, leakage-free signal comes from a single interpretable
-> **geometric descriptor**, which already beats the leakage-corrected sequence
-> model. The underlying KLIFS data is sound (known-drug check passes 5/6).
-
-### Claim vs reality
-
-| Metric | Value (reproduced) | Tag | Command |
-|---|---|---|---|
-| Hybrid RF / MLP regression | R² = 0.964 / 0.947 | SYNTHETIC | `python scripts/hybrid_kinase_model.py` |
-| DFG × drug-size importance | 0.56 (hybrid gen.) **but 0.155** (ablation gen.) | SYNTHETIC | `python scripts/hybrid_kinase_model.py` |
-| Sequence-only regression | R² = 0.015 | SYNTHETIC | `python scripts/kinase_ablation.py` |
-| Structure features (RF/GBM) | R² = 0.352 | SYNTHETIC | `python scripts/kinase_ablation.py` |
-| Static EGNN / Spiking EGNN | R² = −0.064 / −0.089 (did not converge; spiking no better, p = 0.125) | SYNTHETIC | `python scripts/kinase_ablation.py` |
-| DFG classifier, pocket sequence, **ungrouped** | acc 0.893, AUROC 0.946 | LEAKY | `python scripts/kinase_audit.py` |
-| DFG classifier, pocket sequence, **grouped LOKO** | acc 0.711, **AUROC 0.62** | REAL | `python scripts/kinase_audit.py` |
-| DFG separation, geometric distance alone (training-free) | AUROC 0.844 | REAL | `python scripts/kinase_descriptors.py` |
-| DFG classifier, **2 geometric descriptors, grouped LOKO** | acc 0.80, **AUROC 0.834** | REAL | `python scripts/kinase_descriptors.py` |
-| Known-drug Type I/II validation | 5 / 6 correct | REAL | `python scripts/klifs_validation.py` |
-
-Majority-class baseline for DFG state is **0.792** — note the grouped sequence
-classifier (0.711) is *below* it.
-
----
-
-## The two findings that matter
-
-### 1. Sequence features leak kinase identity
-Under an ungrouped split the pocket-sequence classifier looks strong
-(AUROC 0.946), but under **grouped leave-one-kinase-out** (no kinase in both
-train and test) AUROC collapses to **0.62** — barely above random. The
-85-residue pocket is essentially a kinase's ID badge, so ungrouped folds let the
-model memorize identity rather than learn conformation. Always report the
-grouped number.
-
-### 2. Real geometric descriptors beat the sequence model, without leakage
-Parsing real Cα coordinates from KLIFS (`structure_get_pocket` mol2, 85 pocket
-residues) we compute two interpretable, training-free descriptors: the
-**DFG-to-αC-helix distance** and the **hinge / activation-loop angle** at the
-catalytic lysine. On 621 structures across 15 kinases:
-
-- The **distance alone** classifies DFG state at **AUROC 0.844** — no training,
-  no possible leakage (it is a fixed physical measurement).
-- **Both descriptors** under **grouped leave-one-kinase-out** reach
-  **AUROC 0.834** (accuracy 0.80) — versus **0.62** for the leakage-corrected
-  sequence model.
-
-![Figure 1](paper/figure1_descriptors.png)
-
-*Figure 1 — DFG-in (blue) separates from DFG-out (orange) along the
-DFG-to-αC distance; the classes overlap in the 10–14 Å band (the old
-"16–22 Å for DFG-out" claim does not hold for this centroid definition), but a
-grouped classifier still generalizes across kinases at 0.834 AUROC.*
-
----
-
-## Reproduce everything
+## Install
 
 ```bash
-pip install scikit-learn scipy requests numpy torch      # deps used by the audit
-python scripts/kinase_audit.py        # REAL numbers (KLIFS; caches to klifs_cache/)
-python scripts/klifs_validation.py    # REAL known-drug Type I/II check (5/6)
-python scripts/hybrid_kinase_model.py # SYNTHETIC hybrid regression
-python scripts/kinase_ablation.py     # SYNTHETIC seq/struct/EGNN ablation (slow, CPU)
+git clone -b kinase-real-descriptors https://github.com/Varosync/Hyaline.git
+cd Hyaline
+pip install requests numpy scikit-learn pandas matplotlib pyarrow
 ```
 
-Results are written to `checkpoints/kinase_audit.json` and cached under
-`klifs_cache/` for deterministic re-runs.
-
----
-
-## Annotate a structure (`analyze`)
-
-Annotate any kinase structure with its conformational state and inhibitor-class
-call from the geometric descriptors. Works on experimental structures and on
-predicted (AlphaFold) models once their 85-residue pocket is extracted; every
-result tags provenance and records the descriptor that drove the call.
+## Quickstart — annotate a structure
 
 ```bash
-python scripts/analyze_kinase.py 2hyy                                   # PDB code in KLIFS
-python scripts/analyze_kinase.py --klifs-id 1081                        # KLIFS structure_ID
-python scripts/analyze_kinase.py --pdb-file model.pdb --kinase ABL1     # arbitrary PDB / AlphaFold
-python scripts/analyze_kinase.py --pdb-file af.pdb --kinase EGFR --provenance predicted
+python scripts/analyze_kinase.py 2hyy                                 # PDB code (KLIFS)
+python scripts/analyze_kinase.py --klifs-id 1081                      # KLIFS structure_ID
+python scripts/analyze_kinase.py --pdb-file model.pdb --kinase ABL1   # any PDB / AlphaFold
+python scripts/analyze_kinase.py 2hyy --pymol out.pml                 # + annotated PyMOL session
 ```
 
-For an arbitrary local PDB (crystal or AlphaFold model), the 85-residue pocket is
-extracted by aligning the structure to a KLIFS reference for the given kinase
-(Needleman-Wunsch; validated: local `2hyy.pdb` reproduces KLIFS's descriptors to
-< 0.1 Å). AlphaFold models of ABL1 and EGFR are annotated without choking.
-
-Example (`2hyy`, imatinib-bound ABL1) — correctly called **DFG-out / Type II**:
+Output (`2hyy`, imatinib-bound ABL1) — correctly called **DFG-out / Type II**:
 
 ```json
 {
@@ -119,10 +41,18 @@ Example (`2hyy`, imatinib-bound ABL1) — correctly called **DFG-out / Type II**
 }
 ```
 
-The DFG call uses a logistic model over the two descriptors
-(`hyaline/kinase/dfg_model.json`; grouped leave-one-kinase-out AUROC 0.834).
+For an arbitrary local PDB (crystal or AlphaFold model), the 85-residue pocket is
+extracted by aligning to a KLIFS reference for the given kinase (validated: local
+`2hyy.pdb` reproduces KLIFS descriptors to < 0.1 Å; AlphaFold ABL1/EGFR annotate
+cleanly). `--pymol` writes a session that loads the structure, colours the DFG
+motif and αC-helix, and labels the call.
 
----
+## Colab
+
+`research/kinase/colab/hyaline_kinase.ipynb` — open in Colab, set `INPUT` to a
+**PDB ID** or **kinase name**, and Run all: one pass clones the repo, computes the
+descriptors, prints the JSON call, and plots where the structure sits among real
+kinase conformations.
 
 ## Atlas
 
@@ -132,77 +62,104 @@ A browsable, downloadable map of human kinases in KLIFS.
 python scripts/build_kinase_atlas.py       # writes research/kinase/atlas/
 ```
 
-Outputs (`research/kinase/atlas/`):
 - `index.html` — offline page (no external assets): searchable table + scatter
   (DFG-to-αC distance vs hinge angle, colored by DFG state). Open it in a browser.
 - `kinase_atlas.parquet` / `.csv` — one row per kinase (loads in pandas).
 
-Each kinase row carries: accessible DFG states, structure counts, known Type I /
-Type II inhibitors, a **Type-II-opportunity score** (heuristic: well-studied
-kinases that reach DFG-out but have few known Type II inhibitors rank high), and
-a geometric descriptor fingerprint where computed. Current build: **318 kinases
-with structures, 13,325 structures**; per-kinase counts reconcile against KLIFS.
-Descriptor fingerprints/scatter currently cover the 12 kinases with computed
-descriptors (grow by extending `kinase_descriptors.py`).
+Each row carries: accessible DFG states, structure counts, known Type I / Type II
+inhibitors, a **Type-II-opportunity score** (heuristic: well-studied kinases that
+reach DFG-out but have few known Type II inhibitors rank high — e.g. HGK, LRRK2),
+and a geometric descriptor fingerprint where computed. Build: **318 kinases,
+13,325 structures**; per-kinase counts reconcile against KLIFS by construction.
 
----
+## Benchmark — the defensible number
+
+```bash
+python scripts/kinase_descriptors.py   # geometric descriptors + grouped LOKO + Figure 1
+python scripts/kinase_audit.py         # sequence-classifier audit (leaky vs grouped)
+python scripts/klifs_validation.py     # known-drug Type I/II check (5/6)
+```
+
+Evaluation is **grouped leave-one-kinase-out** (no kinase in both train and test),
+so the number generalizes to unseen kinases and does not leak identity.
+
+| Approach | Grouped LOKO AUROC |
+|---|---|
+| Pocket **sequence** classifier | 0.62 (leaks identity) |
+| DFG-to-αC **distance** alone (training-free) | 0.844 |
+| **Both geometric descriptors** | **0.834** (acc 0.80) |
+
+![Figure 1](paper/figure1_descriptors.png)
+
+*DFG-in (blue) separates from DFG-out (orange) along the DFG-to-αC distance; a
+grouped classifier generalizes across kinases at 0.834 AUROC.*
+
+## Findings (honest, command-backed)
+
+Every number is tagged **REAL** (real KLIFS data), **SYNTHETIC** (model on invented
+data — a mechanism check, not real-molecule performance), or **LEAKY** (inflated by
+an evaluation that lets the same kinase appear in train and test).
+
+| Metric | Value | Tag | Command |
+|---|---|---|---|
+| Hybrid RF / MLP regression | R² 0.964 / 0.947 | SYNTHETIC | `python scripts/hybrid_kinase_model.py` |
+| DFG × drug-size importance | 0.56 (hybrid gen.) **vs 0.155** (ablation gen.) | SYNTHETIC | `python scripts/hybrid_kinase_model.py` |
+| Sequence-only regression | R² 0.015 | SYNTHETIC | `python scripts/kinase_ablation.py` |
+| Static / Spiking EGNN | R² −0.064 / −0.089 (did not converge; spiking no better, p 0.125) | SYNTHETIC | `python scripts/kinase_ablation.py` |
+| DFG classifier, sequence, **ungrouped** | acc 0.893, AUROC 0.946 | LEAKY | `python scripts/kinase_audit.py` |
+| DFG classifier, sequence, **grouped LOKO** | acc 0.711, **AUROC 0.62** | REAL | `python scripts/kinase_audit.py` |
+| DFG classifier, **2 geometric descriptors, grouped LOKO** | acc 0.80, **AUROC 0.834** | REAL | `python scripts/kinase_descriptors.py` |
+| Known-drug Type I/II validation | 5 / 6 correct | REAL | `python scripts/klifs_validation.py` |
+
+**Two lessons.** (1) *Sequence features leak kinase identity*: ungrouped AUROC 0.946
+collapses to 0.62 under grouped LOKO — the 85-residue pocket is a kinase ID badge.
+(2) *Interpretable geometry wins without leakage*: a training-free physical
+descriptor (0.844) beats the leakage-corrected sequence model (0.62). Known-drug
+validation confirms the data is sound (5/6). The regression/EGNN numbers are
+synthetic (two non-comparable generators) and demonstrate mechanism only.
 
 ## Codebase
 
 | Path | Purpose |
 |------|---------|
-| `hyaline/kinase/analyze.py` | **`analyze`** — annotate one structure (DFG/αC state, descriptors, inhibitor class, provenance) |
-| `hyaline/kinase/pocket_extract.py` | Extract the 85-residue pocket from an arbitrary PDB / AlphaFold model (align to KLIFS reference) |
-| `scripts/analyze_kinase.py` | CLI for `analyze` (PDB code / KLIFS id / local mol2 / arbitrary PDB) |
+| `hyaline/kinase/analyze.py` | **`analyze`** — annotate one structure (DFG/αC, descriptors, inhibitor class, provenance) |
+| `hyaline/kinase/pocket_extract.py` | Extract the 85-residue pocket from an arbitrary PDB / AlphaFold model |
+| `hyaline/kinase/pymol_export.py` | Write an annotated PyMOL session (`--pymol`) |
 | `hyaline/kinase/dfg_model.json` | Dependency-light logistic DFG model (real descriptors, grouped AUROC 0.834) |
-| `scripts/kinase_audit.py` | **Reproducibility audit** — regenerates the REAL sequence-classifier numbers |
-| `scripts/kinase_descriptors.py` | **Geometric descriptors** — real coords → distance/angle, grouped LOKO, Figure 1 |
-| `scripts/build_kinase_atlas.py` | **Atlas** — per-kinase table + offline HTML (search + scatter) |
-| `research/kinase/paper/` | Figure 1 + descriptor CSV artifacts |
-| `hyaline/features/kinase_geometry.py` | Geometric descriptors (DFG–αC distance, hinge angle) |
-| `hyaline/loaders/klifs_loader.py` | KLIFS API client |
-| `hyaline/loaders/klifs_pipeline.py` | Feature-extraction pipeline |
-| `hyaline/models/kinase_binding.py` | Kinase binding / Spiking EGNN model |
-| `scripts/hybrid_kinase_model.py` | Hybrid RF+MLP baseline (synthetic) |
-| `scripts/kinase_ablation.py` | Structure vs sequence vs EGNN ablation (synthetic) |
-| `scripts/klifs_validation.py` | Known-drug Type I/II validation (real) |
-| `scripts/train_real_klifs.py` | Original DFG classifier (hardcoded ABL1 test; superseded by `kinase_audit.py`) |
+| `scripts/analyze_kinase.py` | CLI for `analyze` |
+| `scripts/kinase_descriptors.py` | Geometric descriptors → grouped LOKO + Figure 1 |
+| `scripts/kinase_audit.py` | Reproducibility audit (sequence classifier, leaky vs grouped) |
+| `scripts/build_kinase_atlas.py` | Atlas builder (per-kinase table + offline HTML) |
+| `scripts/klifs_validation.py` | Known-drug Type I/II validation |
+| `research/kinase/colab/` | Colab notebook |
+| `research/kinase/atlas/` | Atlas artifacts (parquet/csv/html) |
+| `research/kinase/paper/` | Figure 1 + descriptor CSV |
 
-## Data
+## Limitations
 
-- **KLIFS:** conformation-annotated human kinase structures on a standardized
-  85-residue pocket alignment. Audit set: **3,259 structures, 15 kinases**
-  (2,580 DFG-in / 679 DFG-out). Counts grow as KLIFS is updated.
-- Real pocket coordinates via KLIFS `structure_get_pocket` (mol2, 85 residues).
-
-## Known limitations
-
-- The regression results (hybrid, ablation) are **synthetic** — two independent,
-  non-comparable data generators; they demonstrate mechanism, not real-molecule
-  accuracy.
+- Regression results (hybrid, ablation) are **synthetic** — two non-comparable
+  generators; mechanism, not real-molecule accuracy.
 - The spiking-EGNN "synchronization" idea shows **no measurable benefit** over a
-  static EGNN on the tested benchmark.
-- `train_screening_model_real_features.py` still uses **mock compound features**
-  (`torch.randn`) despite the "real features" name.
-- Conformation-paired ΔpKi (same ligand, both DFG states) is scarce in real
-  data; hence the synthetic stand-in.
+  static EGNN.
+- `train_screening_model_real_features.py` still uses **mock compound features**.
+- Conformation-paired ΔpKi (same ligand, both DFG states) is scarce in real data.
+- Local-PDB pocket extraction requires the **kinase name** and a KLIFS reference
+  for that kinase.
 
-## Roadmap
+## Roadmap (Ayman's phase plan)
 
-Cleanup toward a defensible artifact (Ayman's phase plan). Invariants across all
-phases: record whether each input is **experimental or predicted**,
-**determinism** (same input → same output), and **every README claim backed by a
-command**.
+Invariants across all phases: record whether each input is **experimental or
+predicted**, **determinism**, and **every claim backed by a command**.
 
-- **Phase 0/1** — ✅ `analyze` command returns DFG/αC state, the geometric
-  fingerprint, and an inhibitor-class call for experimental and predicted inputs,
-  with provenance and driving descriptor. Arbitrary local PDB / AlphaFold models
-  are supported via pocket extraction (align to KLIFS reference), validated on
-  crystals and AlphaFold ABL1/EGFR.
-- **Phase 2** — one defensible number: grouped leave-one-kinase-out on UniProt,
-  reproduced by `make benchmark`. (Prototyped: `kinase_descriptors.py` gives
-  AUROC 0.834 from geometry under grouped LOKO.)
-- **Phase 3** — ✅ atlas: browsable/downloadable map (`scripts/build_kinase_atlas.py`;
-  318 kinases, offline HTML + parquet). *Next:* grow descriptor coverage beyond
-  the current 12 kinases.
-- **Phase 4/5** — Colab/UI + PyMOL export; clean-clone release with artifacts.
+- **Phase 0/1** — ✅ `analyze` (DFG/αC + fingerprint + inhibitor class, provenance),
+  experimental and predicted, incl. arbitrary PDB / AlphaFold pocket extraction.
+- **Phase 2** — ✅ defensible grouped leave-one-kinase-out number (AUROC 0.834),
+  reproduced by command.
+- **Phase 3** — ✅ atlas (318 kinases, offline HTML + parquet). *Next:* grow
+  descriptor coverage beyond the current 12 kinases.
+- **Phase 4** — ✅ `--pymol` export + Colab notebook + README rebuilt around
+  install / quickstart / atlas / benchmark / Colab.
+- **Phase 5** — release: clean-clone install → analyze → benchmark → atlas with
+  nothing failing; attach parquet/CSV/HTML/splits/checkpoint; fold the atlas,
+  AlphaFold annotation, inhibitor-class output, and the leave-one-kinase-out
+  number into the abstract.

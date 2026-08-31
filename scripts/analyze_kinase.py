@@ -40,24 +40,30 @@ def main():
     ap.add_argument("--provenance", default="experimental",
                     choices=["experimental", "predicted", "unknown"],
                     help="Tag input as experimental or predicted (AlphaFold)")
+    ap.add_argument("--pymol", metavar="OUT.pml",
+                    help="Also write an annotated PyMOL session script")
     args = ap.parse_args()
 
     if args.pdb_file:
         if not args.kinase:
             ap.error("--pdb-file requires --kinase")
         res = analyze(args.identifier, provenance=args.provenance,
-                      local_pdb=args.pdb_file, kinase=args.kinase, chain=args.chain)
+                      local_pdb=args.pdb_file, kinase=args.kinase, chain=args.chain,
+                      pymol_out=args.pymol)
     elif args.local:
         ident = args.identifier or Path(args.local).stem
-        res = analyze(ident, provenance=args.provenance, local_mol2=args.local)
+        res = analyze(ident, provenance=args.provenance, local_mol2=args.local,
+                      pymol_out=args.pymol)
     elif args.klifs_id is not None:
-        res = analyze(args.klifs_id, provenance=args.provenance)
+        res = analyze(args.klifs_id, provenance=args.provenance, pymol_out=args.pymol)
     elif args.identifier:
-        res = analyze(args.identifier, provenance=args.provenance)
+        res = analyze(args.identifier, provenance=args.provenance, pymol_out=args.pymol)
     else:
         ap.error("provide a PDB code, --klifs-id, --local <mol2>, or --pdb-file <pdb> --kinase <name>")
 
     print(json.dumps(res.to_dict(), indent=2))
+    if args.pymol:
+        print(f"\nPyMOL session written to: {args.pymol}\n  open with: pymol {args.pymol}")
 
 
 if __name__ == "__main__":

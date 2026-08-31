@@ -124,8 +124,8 @@ def build_reference(kinase_name: str) -> Dict:
 # Local PDB parsing
 # ---------------------------------------------------------------------------
 
-def parse_pdb_ca(path: str, chain: Optional[str] = None) -> List[Tuple[int, str, np.ndarray]]:
-    """Return [(resseq, aa1, xyz), ...] for the chosen chain, in file order."""
+def parse_pdb_ca(path: str, chain: Optional[str] = None):
+    """Return (chain_id, [(resseq, aa1, xyz), ...]) for the chosen chain."""
     per_chain: Dict[str, List] = {}
     seen = set()
     for line in open(path):
@@ -157,9 +157,10 @@ def parse_pdb_ca(path: str, chain: Optional[str] = None) -> List[Tuple[int, str,
     if chain is not None:
         if chain not in per_chain:
             raise ValueError(f"chain '{chain}' not found; chains: {list(per_chain)}")
-        return per_chain[chain]
+        return chain, per_chain[chain]
     # default: chain with the most residues
-    return max(per_chain.values(), key=len)
+    best = max(per_chain.items(), key=lambda kv: len(kv[1]))
+    return best[0], best[1]
 
 
 # ---------------------------------------------------------------------------
@@ -204,19 +205,22 @@ def extract_pocket_ca(pdb_path: str, kinase_name: str,
     ref_seq = ref["sequence"]
     pos_to_ref = {int(k): v for k, v in ref["pos_to_index"].items()}
 
-    local = parse_pdb_ca(pdb_path, chain)
+    chain_id, local = parse_pdb_ca(pdb_path, chain)
     local_seq = "".join(aa for _, aa, _ in local)
 
     ref_to_local = nw_align(ref_seq, local_seq)  # ref index -> local index
 
     ca: Dict[int, np.ndarray] = {}
+    resnums: Dict[int, int] = {}
     mapped = 0
     for pos, ref_idx in pos_to_ref.items():
         li = ref_to_local.get(ref_idx)
         if li is not None:
             ca[pos] = local[li][2]
+            resnums[pos] = local[li][0]
             mapped += 1
     info = {"kinase": kinase_name, "reference_pdb": ref.get("pdb"),
+            "chain": chain_id, "resnums": resnums,
             "pocket_positions_mapped": mapped, "local_residues": len(local),
             "identity_to_reference": round(
                 sum(1 for r, l in ref_to_local.items() if ref_seq[r] == local_seq[l])

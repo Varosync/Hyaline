@@ -151,16 +151,20 @@ def _structure_from_pdb(pdb: str) -> Optional[Dict]:
 # Public API
 # ---------------------------------------------------------------------------
 
-def _load_pocket_extract():
-    """Load pocket_extract by path so analyze works standalone or as a package."""
+def _load_sibling(module_name: str):
+    """Load a sibling module by path (works standalone or as a package)."""
     import importlib.util
     import sys
-    p = os.path.join(os.path.dirname(__file__), "pocket_extract.py")
-    spec = importlib.util.spec_from_file_location("hyaline_kinase_pocket_extract", p)
+    p = os.path.join(os.path.dirname(__file__), f"{module_name}.py")
+    spec = importlib.util.spec_from_file_location(f"hyaline_kinase_{module_name}", p)
     m = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = m
     spec.loader.exec_module(m)
     return m
+
+
+def _load_pocket_extract():
+    return _load_sibling("pocket_extract")
 
 
 def analyze(
@@ -170,6 +174,7 @@ def analyze(
     local_pdb: Optional[str] = None,
     kinase: Optional[str] = None,
     chain: Optional[str] = None,
+    pymol_out: Optional[str] = None,
 ) -> AnalysisResult:
     """Annotate one kinase structure.
 
@@ -194,6 +199,8 @@ def analyze(
     warnings: list = []
     achelix_state, achelix_source = "unknown", "not_computed"
     ca = None
+    mol2 = None
+    extract_info = None
     if local_pdb:
         source = "local_pdb"
     elif local_mol2:
@@ -209,6 +216,7 @@ def analyze(
             raise ValueError("local_pdb requires the 'kinase' argument")
         pe = _load_pocket_extract()
         ca, info = pe.extract_pocket_ca(local_pdb, kinase, chain=chain)
+        extract_info = info
         identifier = identifier or os.path.basename(local_pdb)
         if info["pocket_positions_mapped"] < 60:
             warnings.append(f"only {info['pocket_positions_mapped']}/85 pocket "
@@ -266,6 +274,30 @@ def analyze(
     else:
         inhibitor = "Type I"
         rationale = "DFG-in active-like pocket engaged by Type I inhibitors"
+
+    # --- optional annotated PyMOL session ---
+    if pymol_out:
+        try:
+            px = _load_sibling("pymol_export")
+            annotation = f"{dfg_call} | {inhibitor} | DFG-aC {dist:.1f}A"
+            if extract_info is not None:  # local PDB
+                load_cmd = f"load {os.path.abspath(local_pdb)}, model"
+                px.write_session(pymol_out, load_cmd, extract_info.get("chain"),
+                                 {int(k): v for k, v in extract_info["resnums"].items()},
+                                 annotation)
+            elif mol2 is not None:  # KLIFS / PDB / local mol2
+                pdb, ch, pos_resnum = px.parse_pocket_meta(mol2)
+                if pdb:
+                    load_cmd = f"fetch {pdb}, async=0"
+                elif local_mol2:
+                    load_cmd = f"load {os.path.abspath(local_mol2)}"
+                else:
+                    load_cmd = "# no loadable structure"
+                px.write_session(pymol_out, load_cmd, ch, pos_resnum, annotation)
+            else:
+                warnings.append("pymol export skipped: no structure source")
+        except Exception as e:  # never fail the analysis over the export
+            warnings.append(f"pymol export failed: {e}")
 
     return AnalysisResult(
         schema_version=SCHEMA_VERSION,
