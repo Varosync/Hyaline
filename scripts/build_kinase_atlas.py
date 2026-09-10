@@ -6,7 +6,8 @@ Build the Hyaline kinase atlas.
 A browsable, downloadable map of human kinases. For every human kinase in KLIFS
 it records the accessible DFG / alphaC states, structure counts, known Type I and
 Type II inhibitors, a Type-II-opportunity score, and (where computed) a geometric
-descriptor fingerprint.
+descriptor fingerprint. Every row is tagged with its provenance (all KLIFS
+structures here are ``experimental``), so the source is recorded, never implicit.
 
 Outputs (research/kinase/atlas/):
   * kinase_atlas.parquet / .csv   -- one row per kinase (loads in pandas)
@@ -135,6 +136,10 @@ def build_rows(raw, med):
             "kinase": name,
             "gene": meta.get("gene_name", ""),
             "uniprot": meta.get("accession", ""),
+            # Every atlas record is built from KLIFS experimental structures.
+            # Recorded explicitly so provenance is never implicit (invariant:
+            # every output records experimental vs predicted).
+            "provenance": "experimental",
             "n_structures": n,
             "n_dfg_in": n_in,
             "n_dfg_out": n_out,
@@ -178,9 +183,10 @@ def render_html(rows, points):
   .muted{color:var(--muted)}
 </style></head><body>
 <header><h1>Hyaline Kinase Atlas</h1>
-<div class="sub">Human kinases from KLIFS — accessible DFG states, known Type I/II
-inhibitors, a Type-II-opportunity score (heuristic), and a geometric descriptor
-fingerprint where computed. Counts reconcile against KLIFS structures.</div></header>
+<div class="sub">Human kinases from KLIFS (experimental structures) — accessible DFG
+states, known Type I/II inhibitors, a Type-II-opportunity score (heuristic), and a
+geometric descriptor fingerprint where computed. Counts reconcile against KLIFS
+structures; every row is tagged provenance=experimental.</div></header>
 <div class="wrap">
  <div>
   <input id="q" placeholder="Search kinase / gene / UniProt…" oninput="draw()">

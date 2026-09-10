@@ -22,21 +22,30 @@ except ImportError:
     count_params_v2 = None
     _HAS_TORCH_GEOMETRIC = False
 
-# Kinase models
-from .models.spiking_egnn import SpikingEGNN, SpikingEGNNConfig, SpikingEGNNLayer
-from .models.kinase_binding import (
-    KinaseBindingPredictor,
-    KinaseBindingConfig,
-    KLIFSLoader,
-)
-from .models.conformational_prior import ConformationalPrior, ConformationalPriorConfig
-
-# Feature extractors
-from .features.geometric import GeometricFeatureExtractor, extract_from_pdb_file
-from .features.classical import ClassicalFeatureExtractor, NormalModeGenerator
-
-# GPCR data (legacy)
-from .data import load_dataset_with_motifs
+# Deep-learning components (kinase GNN models, feature extractors, GPCR data)
+# are optional: they require torch / torch_geometric / h5py. The kinase
+# `analyze` path is intentionally dependency-light (numpy + requests only), so
+# a kinase-only install must be able to `import hyaline` without these present.
+try:
+    from .models.spiking_egnn import SpikingEGNN, SpikingEGNNConfig, SpikingEGNNLayer
+    from .models.kinase_binding import (
+        KinaseBindingPredictor,
+        KinaseBindingConfig,
+        KLIFSLoader,
+    )
+    from .models.conformational_prior import ConformationalPrior, ConformationalPriorConfig
+    from .features.geometric import GeometricFeatureExtractor, extract_from_pdb_file
+    from .features.classical import ClassicalFeatureExtractor, NormalModeGenerator
+    from .data import load_dataset_with_motifs
+    _HAS_DEEP_LEARNING = True
+except ImportError:
+    SpikingEGNN = SpikingEGNNConfig = SpikingEGNNLayer = None
+    KinaseBindingPredictor = KinaseBindingConfig = KLIFSLoader = None
+    ConformationalPrior = ConformationalPriorConfig = None
+    GeometricFeatureExtractor = extract_from_pdb_file = None
+    ClassicalFeatureExtractor = NormalModeGenerator = None
+    load_dataset_with_motifs = None
+    _HAS_DEEP_LEARNING = False
 
 __version__ = "2.2.0"
 __all__ = [

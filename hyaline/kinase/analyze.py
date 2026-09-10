@@ -34,6 +34,7 @@ import requests
 BASE = "https://klifs.net/api_v2"
 SCHEMA_VERSION = "1.0"
 _MODEL_PATH = os.path.join(os.path.dirname(__file__), "dfg_model.json")
+_SCHEMA_PATH = os.path.join(os.path.dirname(__file__), "analysis_schema.json")
 
 # Distance above which the pocket is so open that an allosteric / back-pocket
 # mode is likely accessible (heuristic, from the DFG-out tail in real data).
@@ -60,6 +61,88 @@ class AnalysisResult:
 
     def to_dict(self) -> Dict:
         return asdict(self)
+
+
+# ---------------------------------------------------------------------------
+# Fixed-schema validation (Phase 1: output validates against analysis_schema.json)
+# ---------------------------------------------------------------------------
+
+def load_schema() -> Dict:
+    """Return the pinned JSON Schema for an analysis result."""
+    with open(_SCHEMA_PATH) as f:
+        return json.load(f)
+
+
+def _validate_builtin(instance: Dict, schema: Dict) -> list:
+    """Dependency-free validator for the subset of JSON Schema this file uses
+    (type, enum, const, required, additionalProperties, minimum, maximum).
+
+    Returns a list of human-readable error strings; empty means valid.
+    """
+    errors: list = []
+    _JSON_TYPES = {
+        "object": dict, "array": list, "string": str,
+        "integer": int, "number": (int, float), "null": type(None),
+        "boolean": bool,
+    }
+
+    def check(value, subschema, path):
+        types = subschema.get("type")
+        if types is not None:
+            allowed = types if isinstance(types, list) else [types]
+            py = tuple(t for name in allowed for t in
+                       ((_JSON_TYPES[name],) if not isinstance(_JSON_TYPES[name], tuple)
+                        else _JSON_TYPES[name]))
+            # bool is a subclass of int; reject it where int/number is meant
+            ok = isinstance(value, py) and not (
+                isinstance(value, bool) and "boolean" not in allowed)
+            if not ok:
+                errors.append(f"{path}: expected type {allowed}, got {type(value).__name__}")
+                return
+        if "const" in subschema and value != subschema["const"]:
+            errors.append(f"{path}: expected const {subschema['const']!r}, got {value!r}")
+        if "enum" in subschema and value not in subschema["enum"]:
+            errors.append(f"{path}: {value!r} not in enum {subschema['enum']}")
+        if isinstance(value, (int, float)) and not isinstance(value, bool):
+            if "minimum" in subschema and value < subschema["minimum"]:
+                errors.append(f"{path}: {value} < minimum {subschema['minimum']}")
+            if "maximum" in subschema and value > subschema["maximum"]:
+                errors.append(f"{path}: {value} > maximum {subschema['maximum']}")
+        if isinstance(value, dict) and subschema.get("properties"):
+            props = subschema["properties"]
+            for req in subschema.get("required", []):
+                if req not in value:
+                    errors.append(f"{path}: missing required property '{req}'")
+            if subschema.get("additionalProperties") is False:
+                for k in value:
+                    if k not in props:
+                        errors.append(f"{path}: unexpected property '{k}'")
+            for k, sub in props.items():
+                if k in value:
+                    check(value[k], sub, f"{path}.{k}")
+        if isinstance(value, list) and "items" in subschema:
+            for i, item in enumerate(value):
+                check(item, subschema["items"], f"{path}[{i}]")
+
+    check(instance, schema, "$")
+    return errors
+
+
+def validate_result(instance: Dict, schema: Optional[Dict] = None) -> list:
+    """Validate an analysis dict against the pinned schema.
+
+    Uses ``jsonschema`` if installed (full draft 2020-12), otherwise falls back
+    to a dependency-free structural check. Returns a list of error strings;
+    empty means valid.
+    """
+    schema = schema or load_schema()
+    try:
+        import jsonschema  # optional, richer validation
+        validator = jsonschema.Draft202012Validator(schema)
+        return [f"{'/'.join(map(str, e.path)) or '$'}: {e.message}"
+                for e in validator.iter_errors(instance)]
+    except ImportError:
+        return _validate_builtin(instance, schema)
 
 
 # ---------------------------------------------------------------------------

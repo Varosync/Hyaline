@@ -17,6 +17,23 @@ The model achieves **0.995 AuROC** on cross-validation and **0.819 AuROC** on a 
 
 For technical details, see the [paper](https://www.biorxiv.org/content/10.64898/2026.01.05.697778v1).
 
+## Kinase extension (DFG / inhibitor-class annotation)
+
+Beyond GPCRs, Hyaline ships a **self-contained kinase tool** — no GPU, no torch — that
+annotates any kinase structure with its DFG-in / DFG-out state and an inhibitor-class
+call (Type I / Type II / allosteric-accessible) from interpretable geometric descriptors
+on the real KLIFS pocket. Grouped leave-one-kinase-out **AUROC 0.834**.
+
+```bash
+pip install requests numpy scikit-learn pandas matplotlib pyarrow   # kinase-only deps
+hyaline analyze 2hyy                                                 # -> DFG-out / Type II (imatinib-bound ABL1)
+hyaline analyze --pdb-file model.pdb --kinase ABL1 --provenance predicted   # any PDB / AlphaFold
+```
+
+- **Quickstart, atlas, benchmark, and Colab:** [`research/kinase/README.md`](research/kinase/README.md)
+- **Offline atlas** (318 kinases, searchable HTML + parquet): [`research/kinase/atlas/`](research/kinase/atlas/)
+- **Release entry points** (`make analyze | benchmark | atlas | verify`): [`Makefile`](Makefile)
+
 ## Installation
 
 ```bash

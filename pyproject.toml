@@ -58,3 +58,6 @@ Repository = "https://github.com/Varosync/Hyaline"
 
 [tool.setuptools.packages.find]
 include = ["hyaline*"]
+
+[tool.setuptools.package-data]
+"hyaline.kinase" = ["*.json"]

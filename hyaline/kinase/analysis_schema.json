@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Varosync/Hyaline/hyaline/kinase/analysis_schema.json",
+  "title": "Hyaline kinase analysis result",
+  "description": "Fixed output contract for `hyaline analyze` / scripts/analyze_kinase.py. schema_version pins this contract.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "identifier",
+    "source",
+    "provenance",
+    "dfg_achelix_distance_A",
+    "hinge_activation_angle_deg",
+    "n_pocket_residues_resolved",
+    "dfg_call",
+    "dfg_confidence",
+    "dfg_driver",
+    "achelix_state",
+    "achelix_source",
+    "inhibitor_class",
+    "inhibitor_rationale",
+    "warnings"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "const": "1.0"},
+    "identifier": {"type": "string"},
+    "source": {
+      "type": "string",
+      "enum": ["pdb", "klifs_structure_id", "local_mol2", "local_pdb"]
+    },
+    "provenance": {
+      "type": "string",
+      "enum": ["experimental", "predicted", "unknown"]
+    },
+    "dfg_achelix_distance_A": {"type": ["number", "null"], "minimum": 0},
+    "hinge_activation_angle_deg": {"type": ["number", "null"], "minimum": 0, "maximum": 180},
+    "n_pocket_residues_resolved": {"type": "integer", "minimum": 0},
+    "dfg_call": {"type": ["string", "null"], "enum": ["DFG-in", "DFG-out", null]},
+    "dfg_confidence": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+    "dfg_driver": {"type": "string"},
+    "achelix_state": {"type": "string"},
+    "achelix_source": {"type": "string"},
+    "inhibitor_class": {
+      "type": ["string", "null"],
+      "enum": ["Type I", "Type II", "allosteric-accessible", null]
+    },
+    "inhibitor_rationale": {"type": "string"},
+    "warnings": {"type": "array", "items": {"type": "string"}}
+  }
+}

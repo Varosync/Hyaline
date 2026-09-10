@@ -27,6 +27,7 @@ _m = importlib.util.module_from_spec(_spec)
 sys.modules[_spec.name] = _m  # required for dataclass introspection
 _spec.loader.exec_module(_m)
 analyze = _m.analyze
+validate_result = _m.validate_result
 
 
 def main():
@@ -61,7 +62,16 @@ def main():
     else:
         ap.error("provide a PDB code, --klifs-id, --local <mol2>, or --pdb-file <pdb> --kinase <name>")
 
-    print(json.dumps(res.to_dict(), indent=2))
+    out = res.to_dict()
+    print(json.dumps(out, indent=2))
+
+    errors = validate_result(out)
+    if errors:
+        print("Error: output failed schema validation:", file=sys.stderr)
+        for e in errors:
+            print(f"  - {e}", file=sys.stderr)
+        sys.exit(3)
+
     if args.pymol:
         print(f"\nPyMOL session written to: {args.pymol}\n  open with: pymol {args.pymol}")
 
