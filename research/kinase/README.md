@@ -39,15 +39,24 @@ Output (`2hyy`, imatinib-bound ABL1) — correctly called **DFG-out / Type II**:
 
 ```json
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "identifier": "2hyy", "source": "pdb", "provenance": "experimental",
   "dfg_achelix_distance_A": 12.237, "hinge_activation_angle_deg": 59.668,
   "dfg_call": "DFG-out", "dfg_confidence": 0.674, "dfg_driver": "dfg_achelix_distance_A",
-  "achelix_state": "in", "achelix_source": "klifs_annotation",
+  "achelix_ke_distance_A": 10.851, "achelix_state": "aC-in", "achelix_confidence": 0.977,
+  "achelix_source": "klifs_annotation", "achelix_driver": "achelix_ke_distance_A",
   "inhibitor_class": "Type II",
   "inhibitor_rationale": "DFG-out exposes the allosteric pocket engaged by Type II inhibitors"
 }
 ```
+
+The **αC-helix state** (aC-in / aC-out) is computed geometrically from the
+β3-Lys(17)–αC-Glu(24) Cα salt-bridge distance (`achelix_model.json`; grouped
+leave-one-kinase-out **AUROC 0.901**), so it — with a confidence — is returned for
+**any** input, including AlphaFold models that have no KLIFS annotation. When a
+KLIFS αC annotation is present it stays authoritative (`achelix_source:
+klifs_annotation`) and the independent geometric confidence is still reported; a
+disagreement is flagged in `warnings`.
 
 For an arbitrary local PDB (crystal or AlphaFold model), the 85-residue pocket is
 extracted by aligning to a KLIFS reference for the given kinase. `--pymol` writes a
@@ -136,7 +145,9 @@ Attached artifacts:
 | Atlas (parquet / csv / html) | `research/kinase/atlas/` |
 | Benchmark splits (LOKO folds + OOF preds) | `research/kinase/paper/splits.csv` |
 | Figure 1 + descriptor table | `research/kinase/paper/` |
-| DFG model checkpoint | `hyaline/kinase/dfg_model.json` |
+| DFG / αC model checkpoints | `hyaline/kinase/dfg_model.json`, `hyaline/kinase/achelix_model.json` |
+| Output schema (v1.1) | `hyaline/kinase/analysis_schema.json` |
+| Demo evidence (5 experimental + 2 AlphaFold) | `research/kinase/demo/` |
 | Abstract | `research/kinase/paper/ABSTRACT.md` |
 
 A clean checkout runs install → analyze → benchmark → atlas with nothing failing
@@ -155,6 +166,7 @@ kinase appear in train and test — shown to make the leakage explicit).
 | DFG classifier, **2 geometric descriptors, grouped LOKO** | acc 0.80, **AUROC 0.834** | REAL | `python scripts/kinase_descriptors.py` |
 | DFG-to-αC **distance alone** (training-free) | **AUROC 0.844** | REAL | `python scripts/kinase_descriptors.py` |
 | Benchmark (grouped LOKO, deterministic, offline) | **AUROC 0.834** | REAL | `python scripts/kinase_benchmark.py` |
+| αC-in/out from β3-Lys–αC-Glu distance, **grouped LOKO** | acc 0.917, **AUROC 0.901** | REAL | `python scripts/calibrate_achelix.py` |
 
 **Two lessons.** (1) *Sequence features leak kinase identity*: ungrouped AUROC 0.946
 collapses to 0.62 under grouped LOKO — the 85-residue pocket is a kinase ID badge.
@@ -183,10 +195,14 @@ invented data): a mechanism check, never real-molecule performance.
 | `hyaline/kinase/pocket_extract.py` | Extract the 85-residue pocket from an arbitrary PDB / AlphaFold model |
 | `hyaline/kinase/pymol_export.py` | Write an annotated PyMOL session (`--pymol`) |
 | `hyaline/kinase/dfg_model.json` | Dependency-light logistic DFG model (real descriptors, grouped AUROC 0.834) |
+| `hyaline/kinase/achelix_model.json` | Logistic αC-in/out model (β3-Lys–αC-Glu distance, grouped AUROC 0.901) |
+| `hyaline/kinase/analysis_schema.json` | Fixed output schema (v1.1); every `analyze` result is validated against it |
 | `hyaline/cli.py` | `hyaline analyze` subcommand (dependency-light wrapper over `analyze`) |
 | `scripts/analyze_kinase.py` | Standalone CLI for `analyze` (no install needed) |
 | `scripts/kinase_descriptors.py` | Geometric descriptors → grouped LOKO + Figure 1 |
+| `scripts/calibrate_achelix.py` | Calibrate the αC model (grouped LOKO) from cached pockets |
 | `scripts/kinase_benchmark.py` | The defensible number (grouped LOKO) → `checkpoints/` + `splits.csv` |
+| `scripts/demo_analyze_batch.py` | Demo: 5 experimental + 2 AlphaFold, schema-validated |
 | `scripts/kinase_audit.py` | Reproducibility audit (sequence classifier, leaky vs grouped) |
 | `scripts/build_kinase_atlas.py` | Atlas builder (per-kinase table + offline HTML) |
 | `research/kinase/colab/` | Colab notebook |

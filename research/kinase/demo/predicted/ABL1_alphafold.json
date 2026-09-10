@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "identifier": "ABL1",
   "source": "local_pdb",
   "provenance": "predicted",
@@ -9,8 +9,11 @@
   "dfg_call": "DFG-in",
   "dfg_confidence": 0.74,
   "dfg_driver": "dfg_achelix_distance_A",
-  "achelix_state": "unknown",
-  "achelix_source": "not_computed",
+  "achelix_ke_distance_A": 10.647,
+  "achelix_state": "aC-in",
+  "achelix_confidence": 0.981,
+  "achelix_source": "geometry",
+  "achelix_driver": "achelix_ke_distance_A",
   "inhibitor_class": "Type I",
   "inhibitor_rationale": "DFG-in active-like pocket engaged by Type I inhibitors",
   "warnings": []

@@ -1,0 +1,13 @@
+{
+  "features": [
+    "achelix_ke_distance_A"
+  ],
+  "weights": [
+    1.1258824798879525
+  ],
+  "intercept": -15.954344220730766,
+  "positive_class": "aC-out",
+  "n_train": 664,
+  "note": "logistic on the beta3-Lys(17)--aC-Glu(24) Calpha distance; grouped leave-one-kinase-out AUROC 0.901",
+  "grouped_loko_auroc": 0.901
+}

@@ -16,14 +16,17 @@
     "dfg_call",
     "dfg_confidence",
     "dfg_driver",
+    "achelix_ke_distance_A",
     "achelix_state",
+    "achelix_confidence",
     "achelix_source",
+    "achelix_driver",
     "inhibitor_class",
     "inhibitor_rationale",
     "warnings"
   ],
   "properties": {
-    "schema_version": {"type": "string", "const": "1.0"},
+    "schema_version": {"type": "string", "const": "1.1"},
     "identifier": {"type": "string"},
     "source": {
       "type": "string",
@@ -39,8 +42,14 @@
     "dfg_call": {"type": ["string", "null"], "enum": ["DFG-in", "DFG-out", null]},
     "dfg_confidence": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
     "dfg_driver": {"type": "string"},
-    "achelix_state": {"type": "string"},
-    "achelix_source": {"type": "string"},
+    "achelix_ke_distance_A": {"type": ["number", "null"], "minimum": 0},
+    "achelix_state": {"type": "string", "enum": ["aC-in", "aC-out", "unknown"]},
+    "achelix_confidence": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+    "achelix_source": {
+      "type": "string",
+      "enum": ["klifs_annotation", "geometry", "not_computed"]
+    },
+    "achelix_driver": {"type": "string"},
     "inhibitor_class": {
       "type": ["string", "null"],
       "enum": ["Type I", "Type II", "allosteric-accessible", null]

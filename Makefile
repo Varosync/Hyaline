@@ -22,6 +22,9 @@ atlas:              ## build the offline kinase atlas (HTML + parquet)
 demo:               ## annotate 5 experimental + 2 AlphaFold structures (schema-validated)
 	$(PY) scripts/demo_analyze_batch.py
 
+achelix:            ## calibrate the alphaC-helix model (grouped LOKO) -> achelix_model.json
+	$(PY) scripts/calibrate_achelix.py
+
 audit:              ## reproducibility audit (sequence classifier, leaky vs grouped)
 	$(PY) scripts/kinase_audit.py
 
@@ -30,4 +33,4 @@ verify:             ## smoke test: analyze + benchmark + atlas must all succeed
 	$(PY) scripts/kinase_benchmark.py > /dev/null && echo "benchmark OK"
 	$(PY) scripts/build_kinase_atlas.py > /dev/null && echo "atlas    OK"
 
-.PHONY: install analyze descriptors benchmark atlas demo audit verify
+.PHONY: install analyze descriptors benchmark atlas demo achelix audit verify

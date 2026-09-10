@@ -32,8 +32,9 @@ import numpy as np
 import requests
 
 BASE = "https://klifs.net/api_v2"
-SCHEMA_VERSION = "1.0"
+SCHEMA_VERSION = "1.1"
 _MODEL_PATH = os.path.join(os.path.dirname(__file__), "dfg_model.json")
+_ACHELIX_MODEL_PATH = os.path.join(os.path.dirname(__file__), "achelix_model.json")
 _SCHEMA_PATH = os.path.join(os.path.dirname(__file__), "analysis_schema.json")
 
 # Distance above which the pocket is so open that an allosteric / back-pocket
@@ -53,8 +54,11 @@ class AnalysisResult:
     dfg_call: Optional[str]
     dfg_confidence: Optional[float]
     dfg_driver: str
+    achelix_ke_distance_A: Optional[float]
     achelix_state: str
+    achelix_confidence: Optional[float]
     achelix_source: str
+    achelix_driver: str
     inhibitor_class: Optional[str]
     inhibitor_rationale: str
     warnings: list
@@ -175,6 +179,25 @@ def _dfg_achelix_distance(ca: Dict[int, np.ndarray]) -> Optional[float]:
     return float(np.linalg.norm(np.mean(dfg, 0) - np.mean(ac, 0)))
 
 
+def _achelix_ke_distance(ca: Dict[int, np.ndarray]) -> Optional[float]:
+    """beta3-Lys(17) -- aC-Glu(24) Calpha distance: the salt-bridge proxy that
+    separates aC-in (short) from aC-out (long)."""
+    lys, glu = ca.get(17), ca.get(24)
+    if lys is None or glu is None:
+        return None
+    return float(np.linalg.norm(lys - glu))
+
+
+def _norm_achelix(v) -> str:
+    """Normalise a KLIFS aC_helix label to the reported vocabulary."""
+    s = str(v).lower()
+    if s == "in":
+        return "aC-in"
+    if s == "out":
+        return "aC-out"
+    return "unknown"
+
+
 def _hinge_activation_angle(ca: Dict[int, np.ndarray]) -> Optional[float]:
     hinge = [ca[i] for i in (46, 47, 48) if i in ca]
     actloop = [ca[i] for i in range(72, 86) if i in ca]
@@ -196,10 +219,20 @@ def _load_model() -> Dict:
         return json.load(f)
 
 
+def _load_achelix_model() -> Dict:
+    with open(_ACHELIX_MODEL_PATH) as f:
+        return json.load(f)
+
+
 def _dfg_probability(distance: float, angle: float, model: Dict) -> float:
     w = model["weights"]
     z = w[0] * distance + w[1] * angle + model["intercept"]
     return 1.0 / (1.0 + math.exp(-z))  # P(DFG-out)
+
+
+def _achelix_probability(ke_distance: float, model: Dict) -> float:
+    z = model["weights"][0] * ke_distance + model["intercept"]
+    return 1.0 / (1.0 + math.exp(-z))  # P(aC-out)
 
 
 # ---------------------------------------------------------------------------
@@ -281,6 +314,9 @@ def analyze(
     """
     warnings: list = []
     achelix_state, achelix_source = "unknown", "not_computed"
+    achelix_conf: Optional[float] = None
+    achelix_dist: Optional[float] = None
+    klifs_achelix = None  # raw KLIFS aC_helix annotation, if the input path has one
     ca = None
     mol2 = None
     extract_info = None
@@ -317,28 +353,60 @@ def analyze(
         if meta is None:
             warnings.append(f"PDB '{identifier}' not found in KLIFS")
             return AnalysisResult(
-                SCHEMA_VERSION, str(identifier), source, provenance,
-                None, None, 0, None, None, "dfg_achelix_distance_A",
-                achelix_state, achelix_source, None,
-                "no structure available", warnings)
+                schema_version=SCHEMA_VERSION, identifier=str(identifier),
+                source=source, provenance=provenance,
+                dfg_achelix_distance_A=None, hinge_activation_angle_deg=None,
+                n_pocket_residues_resolved=0, dfg_call=None, dfg_confidence=None,
+                dfg_driver="dfg_achelix_distance_A",
+                achelix_ke_distance_A=None, achelix_state=achelix_state,
+                achelix_confidence=None, achelix_source=achelix_source,
+                achelix_driver="achelix_ke_distance_A",
+                inhibitor_class=None, inhibitor_rationale="no structure available",
+                warnings=warnings)
         sid = meta["structure_ID"]
         mol2 = _resolve_klifs(sid)["mol2"]
-        achelix_state = str(meta.get("aC_helix") or "unknown")
-        achelix_source = "klifs_annotation"
+        klifs_achelix = meta.get("aC_helix")  # reconciled with geometry below
 
     if ca is None:  # not the local_pdb path
         ca = _parse_pocket_ca(mol2)
     dist = _dfg_achelix_distance(ca)
     angle = _hinge_activation_angle(ca)
+    achelix_dist = _achelix_ke_distance(ca)
     n_res = len(ca)
+
+    # --- alphaC-helix call (geometric, works on any input incl. AlphaFold) ---
+    # Geometry gives a call + confidence from the beta3-Lys--aC-Glu distance; a
+    # KLIFS annotation, when present, is authoritative for the reported state but
+    # the independent geometric confidence is still recorded.
+    geo_state, geo_conf = "unknown", None
+    if achelix_dist is not None:
+        p_ac_out = _achelix_probability(achelix_dist, _load_achelix_model())
+        geo_state = "aC-out" if p_ac_out >= 0.5 else "aC-in"
+        geo_conf = round(p_ac_out if geo_state == "aC-out" else 1.0 - p_ac_out, 3)
+    klifs_state = _norm_achelix(klifs_achelix) if klifs_achelix is not None else "unknown"
+    if klifs_state != "unknown":
+        achelix_state, achelix_source = klifs_state, "klifs_annotation"
+        achelix_conf = geo_conf
+        if geo_state != "unknown" and geo_state != klifs_state:
+            warnings.append(f"geometric aC call ({geo_state}) disagrees with KLIFS "
+                            f"annotation ({klifs_state})")
+    elif geo_state != "unknown":
+        achelix_state, achelix_source, achelix_conf = geo_state, "geometry", geo_conf
 
     if dist is None or angle is None:
         warnings.append("insufficient resolved pocket residues for descriptors")
         return AnalysisResult(
-            SCHEMA_VERSION, str(identifier), source, provenance,
-            dist, angle, n_res, None, None, "dfg_achelix_distance_A",
-            achelix_state, achelix_source, None,
-            "descriptors unavailable", warnings)
+            schema_version=SCHEMA_VERSION, identifier=str(identifier),
+            source=source, provenance=provenance,
+            dfg_achelix_distance_A=round(dist, 3) if dist is not None else None,
+            hinge_activation_angle_deg=round(angle, 3) if angle is not None else None,
+            n_pocket_residues_resolved=n_res, dfg_call=None, dfg_confidence=None,
+            dfg_driver="dfg_achelix_distance_A",
+            achelix_ke_distance_A=round(achelix_dist, 3) if achelix_dist is not None else None,
+            achelix_state=achelix_state, achelix_confidence=achelix_conf,
+            achelix_source=achelix_source, achelix_driver="achelix_ke_distance_A",
+            inhibitor_class=None, inhibitor_rationale="descriptors unavailable",
+            warnings=warnings)
 
     # --- DFG call ---
     model = _load_model()
@@ -393,8 +461,11 @@ def analyze(
         dfg_call=dfg_call,
         dfg_confidence=confidence,
         dfg_driver="dfg_achelix_distance_A",
+        achelix_ke_distance_A=round(achelix_dist, 3) if achelix_dist is not None else None,
         achelix_state=achelix_state,
+        achelix_confidence=achelix_conf,
         achelix_source=achelix_source,
+        achelix_driver="achelix_ke_distance_A",
         inhibitor_class=inhibitor,
         inhibitor_rationale=rationale,
         warnings=warnings,
