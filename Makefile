@@ -19,6 +19,9 @@ benchmark:          ## the defensible number: grouped leave-one-kinase-out
 atlas:              ## build the offline kinase atlas (HTML + parquet)
 	$(PY) scripts/build_kinase_atlas.py
 
+demo:               ## annotate 5 experimental + 2 AlphaFold structures (schema-validated)
+	$(PY) scripts/demo_analyze_batch.py
+
 audit:              ## reproducibility audit (sequence classifier, leaky vs grouped)
 	$(PY) scripts/kinase_audit.py
 
@@ -27,4 +30,4 @@ verify:             ## smoke test: analyze + benchmark + atlas must all succeed
 	$(PY) scripts/kinase_benchmark.py > /dev/null && echo "benchmark OK"
 	$(PY) scripts/build_kinase_atlas.py > /dev/null && echo "atlas    OK"
 
-.PHONY: install analyze descriptors benchmark atlas audit verify
+.PHONY: install analyze descriptors benchmark atlas demo audit verify

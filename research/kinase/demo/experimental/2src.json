@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "identifier": "2src",
+  "source": "pdb",
+  "provenance": "experimental",
+  "dfg_achelix_distance_A": 12.582,
+  "hinge_activation_angle_deg": 62.344,
+  "n_pocket_residues_resolved": 85,
+  "dfg_call": "DFG-out",
+  "dfg_confidence": 0.772,
+  "dfg_driver": "dfg_achelix_distance_A",
+  "achelix_state": "out",
+  "achelix_source": "klifs_annotation",
+  "inhibitor_class": "Type II",
+  "inhibitor_rationale": "DFG-out exposes the allosteric pocket engaged by Type II inhibitors",
+  "warnings": []
+}

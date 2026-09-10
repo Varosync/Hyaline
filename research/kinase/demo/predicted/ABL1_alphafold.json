@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "identifier": "ABL1",
+  "source": "local_pdb",
+  "provenance": "predicted",
+  "dfg_achelix_distance_A": 10.398,
+  "hinge_activation_angle_deg": 60.442,
+  "n_pocket_residues_resolved": 85,
+  "dfg_call": "DFG-in",
+  "dfg_confidence": 0.74,
+  "dfg_driver": "dfg_achelix_distance_A",
+  "achelix_state": "unknown",
+  "achelix_source": "not_computed",
+  "inhibitor_class": "Type I",
+  "inhibitor_rationale": "DFG-in active-like pocket engaged by Type I inhibitors",
+  "warnings": []
+}

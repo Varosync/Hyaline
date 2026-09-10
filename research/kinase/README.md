@@ -50,10 +50,23 @@ Output (`2hyy`, imatinib-bound ABL1) — correctly called **DFG-out / Type II**:
 ```
 
 For an arbitrary local PDB (crystal or AlphaFold model), the 85-residue pocket is
-extracted by aligning to a KLIFS reference for the given kinase (validated: local
-`2hyy.pdb` reproduces KLIFS descriptors to < 0.1 Å; AlphaFold ABL1/EGFR annotate
-cleanly). `--pymol` writes a session that loads the structure, colours the DFG
-motif and αC-helix, and labels the call.
+extracted by aligning to a KLIFS reference for the given kinase. `--pymol` writes a
+session that loads the structure, colours the DFG motif and αC-helix, and labels
+the call.
+
+### Demo — 5 experimental + 2 AlphaFold (committed evidence)
+
+```bash
+python scripts/demo_analyze_batch.py     # or: make demo
+```
+
+Annotates five experimental KLIFS structures (ABL1, EGFR, BRAF, KIT, SRC) and two
+AlphaFold models (ABL1, EGFR), tags each with provenance, and validates every
+result against the schema. Outputs are committed under
+[`research/kinase/demo/`](demo/demo_summary.md). Note the honest contrast: the
+imatinib-bound ABL1 crystal (`2hyy`) is **DFG-out / Type II**, while the AlphaFold
+ABL1 model is **DFG-in / Type I** — AlphaFold predicts the active conformation, and
+provenance makes that explicit rather than silent.
 
 ## Colab
 
