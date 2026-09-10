@@ -107,7 +107,7 @@ reconcile against KLIFS by construction.
 ## Benchmark — the defensible number
 
 ```bash
-python scripts/kinase_descriptors.py   # geometric descriptors + grouped LOKO + Figure 1
+python scripts/kinase_descriptors.py   # geometric descriptors + grouped LOKO
 python scripts/kinase_benchmark.py     # the defensible number -> checkpoints/ + splits.csv
 python scripts/kinase_audit.py         # sequence-classifier audit (leaky vs grouped)
 ```
@@ -121,10 +121,8 @@ so the number generalizes to unseen kinases and does not leak identity.
 | DFG-to-αC **distance** alone (training-free) | 0.844 |
 | **Both geometric descriptors** | **0.834** (acc 0.80) |
 
-![Figure 1](paper/figure1_descriptors.png)
-
-*DFG-in (blue) separates from DFG-out (orange) along the DFG-to-αC distance; a
-grouped classifier generalizes across kinases at 0.834 AUROC.*
+DFG-in separates from DFG-out along the DFG-to-αC distance; a grouped classifier
+generalizes across kinases at 0.834 AUROC.
 
 ## Release
 
@@ -143,12 +141,11 @@ Attached artifacts:
 | Artifact | Path |
 |---|---|
 | Atlas (parquet / csv / html) | `research/kinase/atlas/` |
-| Benchmark splits (LOKO folds + OOF preds) | `research/kinase/paper/splits.csv` |
-| Figure 1 + descriptor table | `research/kinase/paper/` |
+| Descriptor table | `research/kinase/data/kinase_descriptors.csv` |
+| Benchmark splits (LOKO folds + OOF preds) | `research/kinase/data/splits.csv` |
 | DFG / αC model checkpoints | `hyaline/kinase/dfg_model.json`, `hyaline/kinase/achelix_model.json` |
 | Output schema (v1.1) | `hyaline/kinase/analysis_schema.json` |
 | Demo evidence (5 experimental + 2 AlphaFold) | `research/kinase/demo/` |
-| Abstract | `research/kinase/paper/ABSTRACT.md` |
 
 A clean checkout runs install → analyze → benchmark → atlas with nothing failing
 (`make verify`).
@@ -199,7 +196,7 @@ invented data): a mechanism check, never real-molecule performance.
 | `hyaline/kinase/analysis_schema.json` | Fixed output schema (v1.1); every `analyze` result is validated against it |
 | `hyaline/cli.py` | `hyaline analyze` subcommand (dependency-light wrapper over `analyze`) |
 | `scripts/analyze_kinase.py` | Standalone CLI for `analyze` (no install needed) |
-| `scripts/kinase_descriptors.py` | Geometric descriptors → grouped LOKO + Figure 1 |
+| `scripts/kinase_descriptors.py` | Geometric descriptors → grouped LOKO |
 | `scripts/calibrate_achelix.py` | Calibrate the αC model (grouped LOKO) from cached pockets |
 | `scripts/kinase_benchmark.py` | The defensible number (grouped LOKO) → `checkpoints/` + `splits.csv` |
 | `scripts/demo_analyze_batch.py` | Demo: 5 experimental + 2 AlphaFold, schema-validated |
@@ -207,7 +204,7 @@ invented data): a mechanism check, never real-molecule performance.
 | `scripts/build_kinase_atlas.py` | Atlas builder (per-kinase table + offline HTML) |
 | `research/kinase/colab/` | Colab notebook |
 | `research/kinase/atlas/` | Atlas artifacts (parquet/csv/html) |
-| `research/kinase/paper/` | Figure 1 + descriptor CSV |
+| `research/kinase/data/` | Descriptor CSV + benchmark splits |
 
 ## Limitations
 
@@ -237,7 +234,6 @@ predicted**, **determinism**, and **every claim backed by a command**.
   notebook + README (root and kinase) rebuilt around install / quickstart / atlas /
   benchmark / Colab.
 - **Phase 5** — ✅ release: `make verify` runs install → analyze → benchmark →
-  atlas with nothing failing; artifacts attached (parquet/CSV/HTML/splits/model);
-  the atlas, AlphaFold annotation, inhibitor-class output, and the
-  leave-one-kinase-out number (0.834) are folded into
-  `research/kinase/paper/ABSTRACT.md`.
+  atlas with nothing failing; artifacts attached (parquet/CSV/HTML/splits/model),
+  covering the atlas, AlphaFold annotation, inhibitor-class output, and the
+  leave-one-kinase-out number (0.834).

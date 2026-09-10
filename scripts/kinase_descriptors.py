@@ -27,7 +27,7 @@ from sklearn.metrics import accuracy_score, roc_auc_score
 
 BASE = "https://klifs.net/api_v2"
 POCKETS = "klifs_cache/pockets"
-OUTDIR = "research/kinase/paper"
+OUTDIR = "research/kinase/data"
 CAP_PER_CLASS = 30  # per kinase, per DFG state
 
 KINASES = ["ABL1", "EGFR", "BRAF", "SRC", "KIT", "MAPK14", "MET", "KDR",

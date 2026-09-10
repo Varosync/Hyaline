@@ -33,7 +33,7 @@ import requests
 BASE = "https://klifs.net/api_v2"
 OUT = "research/kinase/atlas"
 CACHE = "klifs_cache/atlas_structures.json"
-DESC_CSV = "research/kinase/paper/kinase_descriptors.csv"
+DESC_CSV = "research/kinase/data/kinase_descriptors.csv"
 
 # Cofactors / crystallization additives that are not drug-like inhibitors.
 NON_DRUG = {"ATP", "ADP", "ANP", "AMP", "GTP", "GDP", "GNP", "ACP", "AGS", "ACO",

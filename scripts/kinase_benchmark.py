@@ -2,12 +2,12 @@
 """
 Kinase benchmark: the one defensible number, reproducibly.
 
-Reads the geometric descriptors (research/kinase/paper/kinase_descriptors.csv)
+Reads the geometric descriptors (research/kinase/data/kinase_descriptors.csv)
 and evaluates DFG-state classification under grouped leave-one-kinase-out (each
 kinase is a fold; no kinase appears in train and test). Writes:
 
   * checkpoints/kinase_benchmark.json  -- grouped AUROC / accuracy + per-kinase
-  * research/kinase/paper/splits.csv   -- the LOKO folds with out-of-fold preds
+  * research/kinase/data/splits.csv    -- the LOKO folds with out-of-fold preds
 
 No network; deterministic. Run `python scripts/kinase_descriptors.py` first if the
 descriptor CSV does not yet exist.
@@ -21,8 +21,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import LeaveOneGroupOut, cross_val_predict
 from sklearn.metrics import accuracy_score, roc_auc_score
 
-DESC = "research/kinase/paper/kinase_descriptors.csv"
-SPLITS = "research/kinase/paper/splits.csv"
+DESC = "research/kinase/data/kinase_descriptors.csv"
+SPLITS = "research/kinase/data/splits.csv"
 OUT = "checkpoints/kinase_benchmark.json"
 
 
